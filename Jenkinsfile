@@ -42,7 +42,7 @@ pipeline {
 		        	// sh 'sudo docker run -d -p 5000:4000 --name asmi-clothing-api-app asmi-clothing-backend:1.0.0'
 					// sh 'sudo docker run -d -p 5000:4000 -p 5432:5432 --name asmi-clothing-api-app asmi-clothing-backend:1.0.0 --add-host=database:18.221.2.60'
 					// sh 'sudo docker run -d -p 5000:4000 --name asmi-clothing-api-app asmi-clothing-backend:1.0.0 --add-host=database:18.221.2.60'
-					sh 'sudo docker run -d --add-host=database:172.17.0.1 -p 5000:4000 --name yourbasket-backend-container yourbasket-backend:1.0.0'
+					sh 'sudo docker run -d --add-host=database:172.17.0.1 -p 80:4000 --name yourbasket-backend-container yourbasket-backend:1.0.0'
 					
 		        }
 		   }
