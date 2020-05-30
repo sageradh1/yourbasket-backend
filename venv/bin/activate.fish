@@ -29,7 +29,7 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/home/sagar/workingDir/asmi-dummy-project-backend/venv"
+set -gx VIRTUAL_ENV "/home/sagar/workingDir/yourbasket-services/yourbasket-backend/venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

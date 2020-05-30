@@ -1,4 +1,3 @@
-dummy_venv/
 **/__pycache__/**
-.idea/
+keys
 venv
