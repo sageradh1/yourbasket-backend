@@ -1,3 +1,2 @@
-**/__pycache__/**
-keys
-venv
+\_\_pycache\_\_
+venv/*

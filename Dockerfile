@@ -9,4 +9,4 @@ RUN pip install -r requirements.txt
 #  apk --purge del .build-deps
 EXPOSE 4000
 
-CMD ["python3", "app.py"]
+CMD ["python3", "run.py"]
