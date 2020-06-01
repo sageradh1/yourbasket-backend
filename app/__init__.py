@@ -32,11 +32,19 @@ print(f"The current database being used is : ${app.config['DB_NAME']} ")
 
 #Loading db instance
 db = SQLAlchemy(app)
+
+#Migration of database
 migrate = Migrate(app, db)
+# with app.app_context():
+#     if db.engine.url.drivername == "sqlite":
+#         migrate.init_app(app, db, render_as_batch=True)
+#     else:
+#         migrate.init_app(app, db)
+
 
 #Loading login manager 
 login = LoginManager(app)
-login.login_view = 'customerLogin'
+login.login_view = 'customer_login'
 
 # Setting timeout for session cookie (It is not a setting for remember_token cookie set by flask_login)
 @app.before_request
@@ -45,7 +53,7 @@ def make_session_permanent():
     app.permanent_session_lifetime = app.config["REMEMBER_COOKIE_DURATION"]
 
 #Loading database models
-from app.customer import models #also has load user for Loginmanager 
+from app.customer import models #also has load_user for Loginmanager 
 from app.product import models
 from app.order import models
 

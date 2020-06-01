@@ -6,11 +6,7 @@ class Config(object):
     DEBUG = False
     TESTING = False
 
-    MAIL_SERVER = 'localhost'
-    MAIL_PORT = 25
-    MAIL_USERNAME = None
-    MAIL_PASSWORD = None
-
+    GENERATED_CUSTOMER_INVOICE_FOLDER= basedir+"/app/static/static/pdf/customer_invoices"
     
     # THUMBNAIL_FOR_UPLOADED_VIDEO_FOLDER = basedir+"/app/static/img/generated/thumbnails"
     

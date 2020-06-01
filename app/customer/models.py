@@ -6,12 +6,17 @@ from app import login
 
 class User(UserMixin,db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), index=True, unique=True)
+
+    email = db.Column(db.String(120), index=True, unique=True,nullable=True)
     username = db.Column(db.String(120), index=True, unique=True)
     first_name = db.Column(db.String(120))
     last_name = db.Column(db.String(120))
     password_hash = db.Column(db.String(200))
-    dob=db.Column(db.DateTime, index=True)
+    dob=db.Column(db.DateTime, index=True,default=datetime.utcnow)
+
+    contactnumber = db.Column(db.String(15))
+    address = db.Column(db.String)
+    city = db.Column(db.String)
 
     def set_password(self, password):
         """Create hashed password."""
@@ -41,7 +46,7 @@ class User(UserMixin,db.Model):
         return cls.query.filter_by(username=_username).first()
 
     def __repr__(self):
-        return '<User id:{} username:{} email:{}>'.format(self.id,get_full_name,self.email)
+        return '<User id:{} username:{} email:{}>'.format(self.id,self.username,self.email)
 
 
 @login.user_loader

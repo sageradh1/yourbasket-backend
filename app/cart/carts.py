@@ -1,5 +1,5 @@
 # from flask import render_template,session, request,redirect,url_for,flash,current_app
-from flask import render_template,redirect,request,session,url_for
+from flask import render_template,redirect,request,session,url_for,flash
 from app import db , app
 from app.product.models import Item
 # import json
@@ -45,6 +45,7 @@ def addtocart():
 @app.route('/carts')
 def getCart():
     if 'Shoppingcart' not in session or len(session['Shoppingcart']) <= 0:
+        flash("Cart is Empty",'danger')
         return redirect(url_for('home'))
     subtotal = 0
     grandtotal = 0
@@ -54,8 +55,9 @@ def getCart():
         discount = (item['discount']/100) * float(item['price'])
         subtotal += float(item['price']) * int(item['quantity'])
         subtotal -= discount
-        tax =("%.2f" %(.06 * float(subtotal)))
-        grandtotal = float("%.2f" % (1.06 * subtotal))
+        # tax =("%.2f" %(.06 * float(subtotal)))
+        tax=0
+        grandtotal = float("%.2f" % (1.00 * subtotal))
     brands=[]
     categories=[]
     return render_template('cart/cart.html',tax=tax, grandtotal=grandtotal,brands=brands,categories=categories)

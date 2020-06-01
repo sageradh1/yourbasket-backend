@@ -17,7 +17,7 @@ class JsonEcodedDict(db.TypeDecorator):
 
 class CustomerOrder(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    invoice = db.Column(db.String(20), unique=True, nullable=False)
+    invoice_number = db.Column(db.String(20), unique=True, nullable=False)
     status = db.Column(db.String(20), default='Ordered', nullable=False)
     customer_id = db.Column(db.Integer, unique=False, nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
@@ -25,3 +25,5 @@ class CustomerOrder(db.Model):
 
     def __repr__(self):
         return'<CustomerOrder %r>' % self.invoice
+
+db.create_all()

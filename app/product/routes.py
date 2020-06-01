@@ -2,7 +2,7 @@ from flask import render_template,request
 # from shop import app,db,photos, search
 from .models import Item,Category
 from app import app
-from app.product.productutils import getCategoriesAndItems
+from .productutils import getCategoriesAndItems,unnullifystring
 
 ################################ Item ################################################### 
 @app.route('/item/<int:id>')

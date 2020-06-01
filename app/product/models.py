@@ -1,6 +1,6 @@
 from app import db
 from datetime import datetime
-
+import json
 
 class Item(db.Model):
     __seachbale__ = ['name','desc']
@@ -76,5 +76,5 @@ class Category(db.Model):
         return cls.query.all()
 
     def __repr__(self):
-        return '<Catgory %r>' % self.name
+        return '<Category %r>' % self.name
 
