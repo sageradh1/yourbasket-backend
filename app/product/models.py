@@ -3,9 +3,9 @@ from datetime import datetime
 import json
 
 class Item(db.Model):
-    __seachbale__ = ['name','desc']
+
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), nullable=False)
+    name = db.Column(db.String, unique=True,nullable=False)
     price = db.Column(db.Numeric(10,2), nullable=False)
     discount = db.Column(db.Integer, default=0)
     left_quantity = db.Column(db.Integer, nullable=False)

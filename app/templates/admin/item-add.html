@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include 'admin/_admin_navbar.html' %}
+<!--==========END NAVBAR ==============-->
+
+
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <div class="text-center bg-info p-2 h4">Add a item</div>
+                {% from "_formhelpers.html" import render_field %}
+                <form action="/additem" method="post" enctype="multipart/form-data">
+                    {{ form.csrf_token }}
+                <div>
+                    {{ render_field(form.name, class="form-control") }}
+                    {{ render_field(form.price, class="form-control") }}
+                    {{ render_field(form.discount, class="form-control") }}
+                    {{ render_field(form.left_quantity, class="form-control") }}
+                    {{ render_field(form.quantity_measuring_unit, class="form-control") }}
+                    {{ render_field(form.category_id, class="form-control") }}
+                    {{ render_field(form.description, class="form-control", rows="10") }}
+                </div>
+                <div class="container">
+                    <div class="row">
+                        {% if getitem %}
+                        <div class="col-md-4"> <input type="file" name="image_1" id="image_1">
+                            <a href="{{url_for('static',filename='images/ad-images/' + getitem.image_1)}}"> images/{{ getitem.image_1}}</a>
+                        </div>
+                        <div class="col-md-4"><input type="file" name="image_2" id="image_2"> 
+                            <a href="{{url_for('static',filename='images/ad-images/' + getitem.image_2)}}">images/{{ getitem.image_2}}</a>
+                        </div>
+                        
+                        <div class="col-md-4"><input type="file" name="image_3" id="image_3"> 
+                            <a href="{{url_for('static',filename='images/ad-images/' + getitem.image_3)}}"> image/{{ getitem.image_3}}</a>
+                        </div>
+                      
+                        {% else %}
+                        <div class="col-md-4">{{ render_field(form.image_1) }}</div>
+                        <div class="col-md-4">{{ render_field(form.image_2) }}</div>
+                        <div class="col-md-4">{{ render_field(form.image_3) }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <p><input type="submit" value="{% if getitem %}Update {% else %}Add{% endif %} item" class="btn-outline-info">
+                </form>
+            </div>
+      <div class="col-md-1"></div>
+    </div>
+</div>
+{% endblock content %}
