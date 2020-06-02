@@ -39,7 +39,7 @@
                     <td>Rs {{"%.2f"|format(subtotal - discount|round(1,'floor')) }}</td>
                     <td><button type="submit" class="btn btn-sm btn-info">Update</button> </td>
                 </form>
-                    <td> <a href="{{url_for('deleteitem', id=key)}}" class="btn btn-sm btn-danger">Delete</a></td>
+                    <td> <a href="{{url_for('deletecartitem', id=key)}}" class="btn btn-sm btn-danger">Delete</a></td>
                 </tr>
                 {% endfor %}
             </tbody>

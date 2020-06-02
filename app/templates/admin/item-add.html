@@ -3,10 +3,6 @@
 {% include 'admin/_admin_navbar.html' %}
 <!--==========END NAVBAR ==============-->
 
-
-
-
-
 <div class="container">
     <div class="row">
         <div class="col-md-1"></div>
@@ -22,7 +18,7 @@
                     {{ render_field(form.left_quantity, class="form-control") }}
                     {{ render_field(form.quantity_measuring_unit, class="form-control") }}
                     {{ render_field(form.category_id, class="form-control") }}
-                    {{ render_field(form.description, class="form-control", rows="10") }}
+                    {{ render_field(form.description, class="form-control", rows="6") }}
                 </div>
                 <div class="container">
                     <div class="row">
@@ -45,7 +41,13 @@
                         {% endif %}
                     </div>
                 </div>
-                <p><input type="submit" value="{% if getitem %}Update {% else %}Add{% endif %} item" class="btn-outline-info">
+                <div class="row ">
+                    <div class="col text-center">
+                        <input type="submit" value="{% if getitem %}Update {% else %}Add{% endif %} item" class="btn btn-success" />
+                    
+                </div>
+                
+                
                 </form>
             </div>
       <div class="col-md-1"></div>

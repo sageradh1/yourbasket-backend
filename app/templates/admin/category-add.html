@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include 'admin/_admin_navbar.html' %}
+<!--==========END NAVBAR ==============-->
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <div class="text-center bg-info p-2 h4">Add a Category</div>
+                {% from "_formhelpers.html" import render_field %}
+                <form action="/addcategory" method="post" enctype="multipart/form-data">
+                    {{ form.csrf_token }}
+                <div>
+                    {{ render_field(form.name, class="form-control") }}
+                    
+                </div>
+                
+                <div class="row ">
+                    <div class="col text-center">
+                        <input type="submit" value="{% if getitem %}Update {% else %}Add{% endif %} item" class="btn btn-success" />
+                    </div>
+                </div>
+                
+                
+                </form>
+            </div>
+      <div class="col-md-1"></div>
+    </div>
+</div>
+{% endblock content %}

@@ -84,8 +84,8 @@ def updatecart(code):
 
 
 
-@app.route('/deleteitem/<int:id>')
-def deleteitem(id):
+@app.route('/deletecartitem/<int:id>')
+def deletecartitem(id):
     if 'Shoppingcart' not in session or len(session['Shoppingcart']) <= 0:
         return redirect(url_for('customer_home'))
     try:

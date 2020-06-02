@@ -31,67 +31,58 @@ def getallitems_admin(id):
         return render_template('admin/items-all.html',allitems=allitems)
 
 
-
-##############################################
-
 @app.route('/additem', methods=['GET','POST'])
 @login_required(role="admin")
 def additem():
     form = Additems()
 
     if request.method=="POST":
-        print("Inside")
-        if form.validate_on_submit():
-            print("validate")
+        try:
+            if form.validate_on_submit():
+                name = form.name.data
+                price = form.price.data
+                discount = form.discount.data
+                left_quantity = form.left_quantity.data
+                desc = form.description.data
+                category_id = request.form.get('category_id')
+                quantity_measuring_unit = request.form.get('quantity_measuring_unit')
+                
+                image_1 = photos.save(request.files.get('image_1'), name=request.files.get('image_1').filename)
+                request.files.get('image_1').save(os.path.join(app.config["UPLOADED_PHOTOS_DEST"], image_1))   
+                
+                if request.files.get('image_2'):
+                    image_2 = photos.save(request.files.get('image_2'), name=request.files.get('image_2').filename)
+                    request.files.get('image_2').save(os.path.join(app.config["UPLOADED_PHOTOS_DEST"], image_2))            
+                else:
+                    image_2 = app.config["DEFAULT_PHOTO_FOR_ITEMS"]
+                
+                if request.files.get('image_3'):
+                    image_3 = photos.save(request.files.get('image_3'), name=request.files.get('image_3').filename)
+                    request.files.get('image_3').save(os.path.join(app.config["UPLOADED_PHOTOS_DEST"], image_3))
+                else:
+                    image_3 = app.config["DEFAULT_PHOTO_FOR_ITEMS"]
 
-            name = form.name.data
-            price = form.price.data
-            discount = form.discount.data
-            left_quantity = form.left_quantity.data
-            desc = form.description.data
-            category_id = request.form.get('category_id')
-            quantity_measuring_unit = request.form.get('quantity_measuring_unit')
-            
-            image_1 = photos.save(request.files.get('image_1'), name=request.files.get('image_1').filename)
-            request.files.get('image_1').save(os.path.join(app.config["UPLOADED_PHOTOS_DEST"], image_1))   
-            
-            if request.files.get('image_2'):
-                image_2 = photos.save(request.files.get('image_2'), name=request.files.get('image_2').filename)
-                request.files.get('image_2').save(os.path.join(app.config["UPLOADED_PHOTOS_DEST"], image_2))            
+                newItem = Item(name=name,price=price,discount=discount,left_quantity=left_quantity,desc=desc,quantity_measuring_unit=quantity_measuring_unit,category_id=category_id,image_1=image_1,image_2=image_2,image_3=image_3)
+                db.session.add(newItem)
+                flash(f'The product {name} was added in database','success')
+                db.session.commit()
+                return redirect(url_for('admin_home'))
+
             else:
-                image_2 = app.config["DEFAULT_PHOTO_FOR_ITEMS"]
-            
-            if request.files.get('image_3'):
-                image_3 = photos.save(request.files.get('image_3'), name=request.files.get('image_3').filename)
-                request.files.get('image_3').save(os.path.join(app.config["UPLOADED_PHOTOS_DEST"], image_3))
-            else:
-                image_3 = app.config["DEFAULT_PHOTO_FOR_ITEMS"]
+                print(form.errors)
+                return render_template('admin/item-add.html', form=form, title='Add a Product')
 
-
-
-            # image_3 = photos.save(request.files.get('image_3'), name=request.files.get('image_3').filename)
-            newItem = Item(name=name,price=price,discount=discount,left_quantity=left_quantity,desc=desc,quantity_measuring_unit=quantity_measuring_unit,category_id=category_id,image_1=image_1,image_2=image_2,image_3=image_3)
-            db.session.add(newItem)
-            flash(f'The product {name} was added in database','success')
-            db.session.commit()
-            return redirect(url_for('admin_home'))
-
-
-
-        else:
-            print(form.errors)
+        except Exception as err:
+            print(err)
             return render_template('admin/item-add.html', form=form, title='Add a Product')
+
         
     return render_template('admin/item-add.html', form=form, title='Add a Product')
 
 
-
-
-
-
-
-# @app.route('/updateproduct/<int:id>', methods=['GET','POST'])
-# def updateproduct(id):
+@app.route('/updateitem/<int:id>', methods=['GET','POST'])
+@login_required(role="admin")
+def updateitem(id):
 #     form = Addproducts(request.form)
 #     product = Addproduct.query.get_or_404(id)
 #     brands = Brand.query.all()
@@ -138,10 +129,11 @@ def additem():
 #     brand = product.brand.name
 #     category = product.category.name
 #     return render_template('products/addproduct.html', form=form, title='Update Product',getproduct=product, brands=brands,categories=categories)
+    return 'updateitem'
 
-
-# @app.route('/deleteproduct/<int:id>', methods=['POST'])
-# def deleteproduct(id):
+@app.route('/deleteitem/<int:id>', methods=['POST'])
+@login_required(role="admin")
+def deleteitem(id):
 #     product = Addproduct.query.get_or_404(id)
 #     if request.method =="POST":
 #         try:
@@ -156,7 +148,8 @@ def additem():
 #         return redirect(url_for('adim'))
 #     flash(f'Can not delete the product','success')
 #     return redirect(url_for('admin'))
-##############################################
+    return 'delete'
+
 
 
 
@@ -202,20 +195,59 @@ def getallcategories_admin(id):
 @app.route('/addcategory', methods=['GET','POST'])
 @login_required(role="admin")
 def addcategory():
-    form = Addcategories(request.form)
-    # categories = Category.query.all()
+    form = Addcategories()
 
     if request.method=="POST":
-        name = form.name.data
+        try:
+            if form.validate_on_submit():
+                name = form.name.data
  
-        # image_3 = photos.save(request.files.get('image_3'), name=request.files.get('image_3').filename)
-        newItem = Item(name=name,price=price,discount=discount,left_quantity=left_quantity,desc=desc,quantity_measuring_unit=quantity_measuring_unit,category_id=category_id,image_1=image_1,image_2=image_2,image_3=image_3)
-        # db.session.add(newItem)
-        # flash(f'The product {name} was added in database','success')
-        # db.session.commit()
-        return redirect(url_for('admin_home'))
+                newCategory = Category(name=name)
+                db.session.add(newCategory)
+                flash(f'The category {name} was added in database','success')
+                db.session.commit()
+                return redirect(url_for('admin_home'))
+
+            else:
+                print(form.errors)
+                return render_template('admin/category-add.html', form=form, title='Add a Category')
+
+        except Exception as err:
+            print(err)
+            return render_template('admin/category-add.html', form=form, title='Add a Category')
+
+        
     return render_template('admin/category-add.html', form=form, title='Add a Category')
 
+
+@app.route('/updatecategory/<int:id>',methods=['GET','POST'])
+def updatecategory(id):
+    # if 'email' not in session:
+    #     flash('Login first please','danger')
+    #     return redirect(url_for('login'))
+    # updatecat = Category.query.get_or_404(id)
+    # category = request.form.get('category')  
+    # if request.method =="POST":
+    #     updatecat.name = category
+    #     flash(f'The category {updatecat.name} was changed to {category}','success')
+    #     db.session.commit()
+    #     return redirect(url_for('categories'))
+    # category = updatecat.name
+    # return render_template('products/addbrand.html', title='Update cat',updatecat=updatecat)
+    return 'updatecart'
+
+
+
+@app.route('/deletecategory/<int:id>', methods=['GET','POST'])
+def deletecategory(id):
+    # category = Category.query.get_or_404(id)
+    # if request.method=="POST":
+    #     db.session.delete(category)
+    #     flash(f"The brand {category.name} was deleted from your database","success")
+    #     db.session.commit()
+    #     return redirect(url_for('admin'))
+    # flash(f"The brand {category.name} can't be  deleted from your database","warning")
+    return 'deletcart'
 
 #################################### Product Search #################################################
         
