@@ -10,7 +10,7 @@ def updateshoppingcart():
     for key, shopping in session['Shoppingcart'].items():
         session.modified = True
         del shopping['image']
-        del shopping['colors']
+
     return updateshoppingcart
 
 @app.route('/makeorder')
@@ -77,15 +77,18 @@ def get_pdf(invoice_number):
                     grandTotal = float("%.2f" % (1.00 * subTotal))
 
                 rendered =  render_template('order/pdf.html', invoice_number=invoice_number, tax=tax,grandTotal=grandTotal,customer=customer,orders=orders)
+                
+                return rendered
                 pdffile = app.config['GENERATED_CUSTOMER_INVOICE_FOLDER'] + '/'+invoice_number+'.pdf'
+                # pdffile = app.config['GENERATED_CUSTOMER_INVOICE_FOLDER'] + '/'+'demo'+'.pdf'
                 pdf = pdfkit.from_string(rendered, pdffile)
                 response = make_response(pdf)
                 response.headers['content-Type'] ='application/pdf'
                 # to make client only view the pdf
-                # response.headers['content-Disposition'] ='inline; filename='+invoice_number+'.pdf'
+                response.headers['content-Disposition'] ='inline; filename='+invoice_number+'.pdf'
                 
                 # to make client download the pdf
-                response.headers['content-Disposition'] ='attachment; filename='+invoice_number+'.pdf'
+                # response.headers['content-Disposition'] ='attachment; filename='+invoice_number+'.pdf'
                 return response
             except Exception as err:
                 print(err)
@@ -95,7 +98,33 @@ def get_pdf(invoice_number):
     return request(url_for('orders'))
 
 
-@app.route('/thanks')
+@app.route('/thankyou')
 @login_required(role="customer")
-def thanks():
-    return render_template('order/thank.html')
+def thankyou():
+    return render_template('order/thankyou.html')
+
+
+@app.route('/customer/orders')
+@login_required(role="customer")
+def customer_orders(invoice_number):
+    if current_user.is_authenticated:
+        grandTotal = 0
+        subTotal = 0
+        customer_id = current_user.id
+        customer = User.query.filter_by(id=customer_id).first()
+        orders = CustomerOrder.query.filter_by(customer_id=customer_id, invoice_number=invoice_number).order_by(CustomerOrder.id.desc()).all()
+        try:
+            for _key, product in orders.orders.items():
+                discount = (product['discount']/100) * float(product['price'])
+                subTotal += float(product['price']) * int(product['quantity'])
+                subTotal -= discount
+                tax = ("%.2f" % (.00 * float(subTotal)))
+                grandTotal = ("%.2f" % (1.00 * float(subTotal)))
+            return render_template('order/orderpage.html', invoice_number=invoice_number, tax=tax,subTotal=subTotal,grandTotal=grandTotal,customer=customer,orders=orders)
+        except Exception as err:
+            print(err)
+            flash("No orders found!",'danger')
+            return redirect(url_for('customer_home'))
+
+    else:
+        return redirect(url_for('customer_login'))

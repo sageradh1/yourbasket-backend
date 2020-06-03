@@ -5,6 +5,7 @@ from app import app,login_required,photos,db
 from .productutils import getCategoriesAndItems,unnullifystring
 from .forms import Additems,Addcategories,Updateitems
 import os
+
 ################################ Item ################################################### 
 @app.route('/item/<int:id>')
 def item_details_page(id):
@@ -253,6 +254,7 @@ def deletecategory(id):
         
 @app.route('/result')
 def result():
+    allcategories , allitems = getCategoriesAndItems()
     searchword = request.args.get('q')
-    products = Item.query.msearch(searchword, fields=['name','desc'] , limit=16)
-    return render_template('products/result.html',products=products,brands=brands(),categories=categories())
+    selected_items = Item.query.msearch(searchword, fields=['name','desc'] , limit=16)
+    return render_template('product/items_search_result.html',selected_items=selected_items,allcategories=allcategories)

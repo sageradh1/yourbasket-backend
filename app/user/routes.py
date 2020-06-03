@@ -4,6 +4,9 @@ from flask import flash,redirect,url_for,render_template
 from .models import User
 from .forms import LoginForm
 
+
+from app.product.productutils import getCategoriesAndItems
+
 @app.route('/login', methods=['GET','POST'])
 def login():
     if current_user.is_authenticated and User.get_urole(current_user)=="admin":
@@ -38,5 +41,7 @@ def login():
         else:
             flash(f'Username does not exist', 'success')
             return redirect(url_for('login'))
+    
 
-    return render_template('user/login.html',title='Login page',form=form)
+    allcategories , allitems = getCategoriesAndItems()
+    return render_template('user/login.html',title='Login page',form=form,allcategories=allcategories,allitems=allitems)

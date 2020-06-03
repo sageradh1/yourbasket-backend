@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+{% include 'navbar.html' %}
+
+<h3> Your order has been placed. </h3>
+
+<div class="jumbotron text-center">
+    <h3 class="display-3">Thank you for choosing us!!</h3>
+    <hr>
+    <p>
+      Having trouble? <a href="">Contact us</a>
+    </p>
+    <p class="lead">
+      <a class="btn btn-primary btn-sm" href="/" role="button">Continue to homepage</a>
+    </p>
+  </div>
+
+
+<script>
+  setTimeout(
+      function()
+      {
+              window.location = "/"
+      }, 
+      5500);
+</script>
+
+
+{% endblock %}
+

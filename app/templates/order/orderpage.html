@@ -20,8 +20,7 @@
             <thead>
                 <th>Sr</th>
                 <th>Name</th>
-                <th>Color</th>
-                <th>Price</th>
+                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Discount</th>
                 <th>Subtotal</th>
@@ -33,15 +32,13 @@
                     <td>{{loop.index}}</td>
                     <td>{{product.name}}</td>
                     <form action="{{url_for('updatecart', code=key)}}" method="post">
-                    <td> 
-                        {{product.color|capitalize}}
-                    </td>
+
                     <td>Rs. {{"%.2f"|format(product.price)}}</td>
                     <td> {{product.quantity}} </td>
                     {% if product.discount  %}
                     <td>{{product.discount}} % &nbsp; &nbsp; is {{"%.2f"|format(discount)}}</td>
                     {% else %}
-                    <td></td>
+                    <td>0</td>
                     {% endif %}
                     {% set subtotal = product.quantity|int * product.price|float  %}
                     <td>Rs. {{"%.2f"|format(subtotal - discount|round(1,'floor')) }}</td>
@@ -54,11 +51,13 @@
            <tr> 
 
                <td>   
+                <a href="{{url_for('thankyou')}}">Thank you for choosing us !!</a>
                    {% if orders.status =='Paid' %}
+                    
                    {% else %}
                 
-              {% endif %}
-            </td>
+                   {% endif %}
+                </td>
                <td width="35%"></td>
                <td> <h5>Tax: Rs. {{tax}}</h5></td>
                <td> <h5>Grand total: Rs. {{grandTotal}}</h3> </td>
@@ -67,7 +66,7 @@
                     <form action="{{url_for('get_pdf', invoice_number=orders.invoice_number)}}" method="post">
                         <button type="submit" class="btn btn-info"> Get pdf</button>
                     </form>
-                     </td>
+                </td>
            </tr>
         </table>
     </div>

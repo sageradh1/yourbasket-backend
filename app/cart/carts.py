@@ -69,13 +69,12 @@ def updatecart(code):
         return redirect(url_for('customer_home'))
     if request.method =="POST":
         quantity = request.form.get('quantity')
-        color = request.form.get('color')
         try:
             session.modified = True
             for key , item in session['Shoppingcart'].items():
                 if int(key) == code:
                     item['quantity'] = quantity
-                    item['color'] = color
+                    
                     flash('Item is updated!')
                     return redirect(url_for('getCart'))
         except Exception as e:

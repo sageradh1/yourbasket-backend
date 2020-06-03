@@ -11,6 +11,10 @@ def customer_home():
     allcategories , allitems = getCategoriesAndItems()    
     return render_template('customer/home.html', allcategories=allcategories,allitems=allitems)
 
+@app.route('/aboutus')
+def about_us():
+    allcategories , allitems = getCategoriesAndItems()    
+    return render_template('customer/about-us.html', allcategories=allcategories,allitems=allitems)
 # @app.route('/customer/login', methods=['GET','POST'])
 # def customer_login():
 #     if current_user.is_authenticated:

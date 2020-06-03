@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 from flask_login import LoginManager,current_user
 from functools import wraps
 from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
-from werkzeug.utils import secure_filename
-
+# from werkzeug.utils import secure_filename
+from flask_msearch import Search
 app = Flask(__name__)
 #To change default locations
 # app = Flask(__name__,
@@ -79,6 +79,9 @@ photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
 patch_request_class(app)
 
+# Search functionality
+search = Search()
+search.init_app(app)
 
 #Loading database models
 from app.user import models #also has load_user for Loginmanager 
@@ -95,11 +98,10 @@ from app.order import orders
 from app.admin import routes
 
 
+# # Admin Dashboard feature
 # from flask_admin.contrib.sqla import ModelView
 # from flask_admin import Admin
 # from app.product.models import Category,Item
-
-# # Admin
 # admin = Admin(app)
 # admin.add_view(ModelView(Category,db.session))
 # admin.add_view(ModelView(Item,db.session))

@@ -1,5 +1,101 @@
+
+<div class="container-fluid d-none d-md-block top-color ">
+
+	<div class="row">
+				<div class="col-md-6 top">
+            <p class="top-left" >
+                Food delivery service	|	  
+                <i class="fas fa-star "></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half"></i>
+                4.84 Rating based on <a id="reviewtext" href="">341 Reviews</a>
+            </p>
+        </div>
+        <div class="col-md-6">
+            <p class="top-right" >
+                <i class="fas fa-phone"></i>
+                <a  class="top-right-part" href="#">Abisekh bro number</a>
+                <button class="btn btn-outline-primary top-right-part">View Products</button>
+            </p>
+        </div>
+    </div>
+  </div>
+    
+<nav class="navbar navbar-expand-md navbar-color sticky-top p-2 top-color">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/"><img height='50px' weight='50px' src="{{url_for('static',filename='images/non-changing-images/logo.png')}}"></a>		
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" >
+    <span class="fa fa-bars">
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">	
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+        </li>      
+        
+          <li class="nav-item dropdown ">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Food Categories
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              {% for category in allcategories %}
+                <a class="dropdown-item" href="{{url_for('get_category',id=category.id)}}">{{category.name}}</a>
+                {% endfor %}
+              <!-- <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+            -->
+            </li>
+        
+        
+        
   
-<div class="container">
+            {% if current_user.is_authenticated %}
+          <li class="nav-item">
+          <a href="{{url_for('customer_logout')}}" class="nav-link">{{current_user.name}}</a>
+        </li>
+          <li class="nav-item">
+            <a href="{{url_for('customer_logout')}}" class="nav-link"> Logout</a>
+          </li>
+          {% else %}
+
+          <li class="nav-item">
+          <a href="{{url_for('login')}}" class="nav-link">Login</a>
+        </li>
+
+        <li class="nav-item">
+          <a href="{{url_for('customer_register')}}" class="nav-link">Sign Up</a>
+        </li>
+
+        {% endif %}
+          <li class="nav-item">
+            <a href="{{url_for('getCart')}}" class="nav-link"> Cart ({{ session['Shoppingcart']|length }}) </a>
+          </li>			
+
+          <li class="nav-item">
+            <a href="{{url_for('about_us')}}" class="nav-link"> About us </a>
+          </li>	
+      </ul>
+      <form class="form-inline my-2 my-lg-0" action="{{url_for('result')}}">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+
+    </div>
+        
+  </div> 
+</nav>
+
+
+
+
+
+
+<!-- =========================================== Previous =============================================== -->
+<!-- <div class="container">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="/">Your Basket</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,5 +147,5 @@
         </div>
       </nav>
      
-</div>
+</div> -->
 <!---============== END OF NAV BAR ==================-->

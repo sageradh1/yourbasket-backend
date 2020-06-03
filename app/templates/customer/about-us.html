@@ -1,0 +1,134 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+{% include 'navbar.html' %}
+<style>
+.alert.success {
+    background-color:#ffedf2;
+    color: green;
+  }
+  
+  .alert.danger {
+    background-color:#ffedf2;
+    color:#f00;
+  }
+</style>
+
+
+
+
+<!-- Page Content -->
+<div class="container">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert text-center {{ category }}"> <b> {{ message|capitalize }} </b> </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+</div>
+
+<!-- Another Two Column Section-->
+<div class="container-fluid padding">
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <h2>Who We Are</h2>
+            <p> Yourbasket is established with the main purpose of bringing both quality and convience in our everyday grocery shopping.</p>
+            <p>We want people to be able to get any food ,that they want, delivered to them within matter of few clicks.In situation like now, where it is not safe to buy foods from any random sources, we want people to have access to a safe and hygienic source where they can rely on. </p>
+            <p>Honestly, we all hate fluctuation in price depending on where you buy your food. We want to provide uniformity in price along with maintaining quality in food.</p>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12">
+                 <img src="img/men3.jpeg" class="img-fluid">
+        </div>
+        
+    </div>
+    
+    <hr class="my-4"></hr>
+
+    <div class="row">
+        <div class="col-md-7">                    
+        </div>
+    
+        <div class="col-md-5">					
+        
+                <div class="divisor-left">
+                        <span class="text-left ">RECENT REVIEWS</span>	
+                </div>
+        
+                <div id="myCarousel" class="carousel slide" data-ride="carousel"  data-interval="4000">
+                        <ol class="carousel-indicators">
+                                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                                    <li data-target="#myCarousel" data-slide-to="1"></li>
+                                    <li data-target="#myCarousel" data-slide-to="2"></li>
+                        </ol>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                    <div class="reviewer-top">
+                                        <div class="person-name">Nisan Thapa Magar</div>
+                                        <div class="date">May 3, 2020</div>																							
+                                    </div>
+                                    <br>
+                                    <i class="fas fa-star yellow review-icon-size "></i>
+                                    <i class="fas fa-star yellow review-icon-size"></i>
+                                    <i class="fas fa-star yellow review-icon-size"></i>
+                                    <i class="fas fa-star yellow review-icon-size"></i>
+                                    <i class="fas fa-star yellow review-icon-size"></i>
+                                    <br>
+                                    <br>
+                                    <div class="reviewer-text">
+                                        the food was fresh !! that's all that mattered to me 
+                                    </div>
+                                    <br>
+                                    <div class="verified row">
+                                        <img id="verified-logo" src="{{url_for('static',filename='svg/verified.svg')}}">
+                                        <div class="verified-text">Verified</div>
+                                        <img id="verified-logo-wide" src="{{url_for('static',filename='svg/reviewpush-logo@2x.png')}}">
+                                        <div class="verified-text">Push</div>																
+                                    </div>
+                            </div>
+                            <div class="carousel-item">
+                                        <div class="reviewer-top">
+                                        <div class="person-name">Radhika Joshi</div>
+                                        <div class="date">April 22, 2020</div>																							
+                                    </div>
+                                    <br>
+                                    <i class="fas fa-star yellow review-icon-size "></i>
+                                    <i class="fas fa-star yellow review-icon-size"></i>
+                                    <i class="fas fa-star yellow review-icon-size"></i>
+                                    <i class="fas fa-star yellow review-icon-size"></i>
+                                    <i class="fas fa-star yellow review-icon-size"></i>
+                                    <br>
+                                    <br>
+                                    <div class="reviewer-text">
+                                        सर्विस सफा र राम्रो लग्यो। फेरी पनि order गर्छु होला। 
+                                    </div>
+                                    <br>
+                                    <div class="verified row">
+                                        <img id="verified-logo" src="{{url_for('static',filename='svg/verified.svg')}}">
+                                        <div class="verified-text">Verified</div>
+                                        <img id="verified-logo-wide" src="{{url_for('static',filename='svg/reviewpush-logo@2x.png')}}">
+                                        <div class="verified-text">Push</div>																
+                                    </div>
+                            </div>                          
+                        </div>
+                        <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                        
+                </div>															
+        </div>
+    </div>
+
+</div>
+
+<!-- /.container -->
+
+
+{% endblock %}
