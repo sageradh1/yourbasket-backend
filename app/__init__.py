@@ -10,6 +10,12 @@ from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_cl
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+#To change default locations
+# app = Flask(__name__,
+#             static_url_path='', 
+#             static_folder='web/static',
+#             template_folder='web/templates')
+
 
 #Loading environment from .startingenv
 APP_ROOT = os.path.join(os.path.dirname(__file__), '..')   # refers to application_top

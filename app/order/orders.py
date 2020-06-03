@@ -1,6 +1,6 @@
 from flask import session,flash,redirect,url_for,render_template,request,make_response
-from flask_login import login_required,current_user
-from app import app,db
+from flask_login import current_user
+from app import app,db,login_required
 from .models import CustomerOrder
 from app.user.models import User
 import secrets
@@ -14,14 +14,14 @@ def updateshoppingcart():
     return updateshoppingcart
 
 @app.route('/makeorder')
-@login_required
+@login_required(role="customer")
 def make_order():
     if current_user.is_authenticated:
         id = current_user.id
-        invoice = secrets.token_hex(5)
+        invoice_number = secrets.token_hex(5)
         updateshoppingcart
         try:
-            order = CustomerOrder(invoice_number=invoice,id=id,orders=session['Shoppingcart'])
+            order = CustomerOrder(invoice_number=invoice_number,customer_id=id,orders=session['Shoppingcart'])
             db.session.add(order)
             db.session.commit()
             session.pop('Shoppingcart')
@@ -33,7 +33,7 @@ def make_order():
             return redirect(url_for('getCart'))
 
 @app.route('/orders/<invoice_number>')
-@login_required
+@login_required(role="customer")
 def orders(invoice_number):
     if current_user.is_authenticated:
         grandTotal = 0
@@ -52,13 +52,13 @@ def orders(invoice_number):
         except Exception as err:
             print(err)
             flash("No orders found!",'danger')
-            return redirect(url_for('home'))
+            return redirect(url_for('customer_home'))
 
     else:
         return redirect(url_for('customer_login'))
     
 @app.route('/get_pdf/<invoice_number>', methods=['POST'])
-@login_required
+@login_required(role="customer")
 def get_pdf(invoice_number):
     if current_user.is_authenticated:
         grandTotal = 0
@@ -90,11 +90,12 @@ def get_pdf(invoice_number):
             except Exception as err:
                 print(err)
                 flash("Problem while reading pdf!",'danger')
-                return redirect(url_for('home'))
+                return redirect(url_for('customer_home'))
 
     return request(url_for('orders'))
 
 
 @app.route('/thanks')
+@login_required(role="customer")
 def thanks():
     return render_template('order/thank.html')

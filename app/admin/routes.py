@@ -29,7 +29,7 @@ from flask_login import login_user,logout_user,current_user
 @login_required(role="admin")
 def admin_logout():
     logout_user()
-    return redirect(url_for('home'))
+    return redirect(url_for('admin_home'))
 
 @app.route('/admin/')
 @login_required(role="admin")

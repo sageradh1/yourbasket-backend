@@ -3,7 +3,7 @@ from flask import render_template,request,redirect,url_for,flash
 from .models import Item,Category
 from app import app,login_required,photos,db
 from .productutils import getCategoriesAndItems,unnullifystring
-from .forms import Additems,Addcategories
+from .forms import Additems,Addcategories,Updateitems
 import os
 ################################ Item ################################################### 
 @app.route('/item/<int:id>')
@@ -20,15 +20,14 @@ def item_details_page(id):
 
 @app.route('/admin/items/')
 @login_required(role="admin")
-def getallitems_admin(id):
+def getallitems_admin():
     allcategories=[]
     allitems=[]
     try:
         allcategories , allitems = getCategoriesAndItems()
-        return render_template('admin/items-all.html',allitems=allitems)
+        return render_template('admin/items-all.html',allitems=allitems,allcategories=allcategories)
     except Exception as err:
-        
-        return render_template('admin/items-all.html',allitems=allitems)
+        return render_template('admin/items-all.html',allitems=allitems,allcategories=allcategories)
 
 
 @app.route('/additem', methods=['GET','POST'])
@@ -43,22 +42,22 @@ def additem():
                 price = form.price.data
                 discount = form.discount.data
                 left_quantity = form.left_quantity.data
-                desc = form.description.data
+                desc = form.desc.data
                 category_id = request.form.get('category_id')
                 quantity_measuring_unit = request.form.get('quantity_measuring_unit')
                 
                 image_1 = photos.save(request.files.get('image_1'), name=request.files.get('image_1').filename)
-                request.files.get('image_1').save(os.path.join(app.config["UPLOADED_PHOTOS_DEST"], image_1))   
+                # request.files.get('image_1').save(os.path.join(app.config["UPLOADED_PHOTOS_DEST"], image_1))   
                 
                 if request.files.get('image_2'):
                     image_2 = photos.save(request.files.get('image_2'), name=request.files.get('image_2').filename)
-                    request.files.get('image_2').save(os.path.join(app.config["UPLOADED_PHOTOS_DEST"], image_2))            
+                    # request.files.get('image_2').save(os.path.join(app.config["UPLOADED_PHOTOS_DEST"], image_2))            
                 else:
                     image_2 = app.config["DEFAULT_PHOTO_FOR_ITEMS"]
                 
                 if request.files.get('image_3'):
                     image_3 = photos.save(request.files.get('image_3'), name=request.files.get('image_3').filename)
-                    request.files.get('image_3').save(os.path.join(app.config["UPLOADED_PHOTOS_DEST"], image_3))
+                    # request.files.get('image_3').save(os.path.join(app.config["UPLOADED_PHOTOS_DEST"], image_3))
                 else:
                     image_3 = app.config["DEFAULT_PHOTO_FOR_ITEMS"]
 
@@ -83,73 +82,73 @@ def additem():
 @app.route('/updateitem/<int:id>', methods=['GET','POST'])
 @login_required(role="admin")
 def updateitem(id):
-#     form = Addproducts(request.form)
-#     product = Addproduct.query.get_or_404(id)
-#     brands = Brand.query.all()
-#     categories = Category.query.all()
-#     brand = request.form.get('brand')
-#     category = request.form.get('category')
-#     if request.method =="POST":
-#         product.name = form.name.data 
-#         product.price = form.price.data
-#         product.discount = form.discount.data
-#         product.stock = form.stock.data 
-#         product.colors = form.colors.data
-#         product.desc = form.discription.data
-#         product.category_id = category
-#         product.brand_id = brand
-#         if request.files.get('image_1'):
-#             try:
-#                 os.unlink(os.path.join(current_app.root_path, "static/images/" + product.image_1))
-#                 product.image_1 = photos.save(request.files.get('image_1'), name=secrets.token_hex(10) + ".")
-#             except:
-#                 product.image_1 = photos.save(request.files.get('image_1'), name=secrets.token_hex(10) + ".")
-#         if request.files.get('image_2'):
-#             try:
-#                 os.unlink(os.path.join(current_app.root_path, "static/images/" + product.image_2))
-#                 product.image_2 = photos.save(request.files.get('image_2'), name=secrets.token_hex(10) + ".")
-#             except:
-#                 product.image_2 = photos.save(request.files.get('image_2'), name=secrets.token_hex(10) + ".")
-#         if request.files.get('image_3'):
-#             try:
-#                 os.unlink(os.path.join(current_app.root_path, "static/images/" + product.image_3))
-#                 product.image_3 = photos.save(request.files.get('image_3'), name=secrets.token_hex(10) + ".")
-#             except:
-#                 product.image_3 = photos.save(request.files.get('image_3'), name=secrets.token_hex(10) + ".")
+    form = Updateitems()
+    item = Item.query.get_or_404(id)
+    if request.method=="POST":
+        try:
+            if form.validate_on_submit():
+                
+                item.name = form.name.data
+                item.price = form.price.data
+                item.discount = form.discount.data
+                item.left_quantity = form.left_quantity.data
+                item.desc = form.desc.data
+                item.category_id = request.form.get('category_id')
+                item.quantity_measuring_unit = request.form.get('quantity_measuring_unit')
+                
 
-#         flash('The product was updated','success')
-#         db.session.commit()
-#         return redirect(url_for('admin'))
-#     form.name.data = product.name
-#     form.price.data = product.price
-#     form.discount.data = product.discount
-#     form.stock.data = product.stock
-#     form.colors.data = product.colors
-#     form.discription.data = product.desc
-#     brand = product.brand.name
-#     category = product.category.name
-#     return render_template('products/addproduct.html', form=form, title='Update Product',getproduct=product, brands=brands,categories=categories)
-    return 'updateitem'
+                if request.files.get('image_1'):
+                    image_1 = photos.save(request.files.get('image_1'), name=request.files.get('image_1').filename)
+                    item.image_1 = image_1
+                    # request.files.get('image_2').save(os.path.join(app.config["UPLOADED_PHOTOS_DEST"], image_2))            
+
+
+                if request.files.get('image_2'):
+                    image_2 = photos.save(request.files.get('image_2'), name=request.files.get('image_2').filename)
+                    item.image_2 = image_2
+                    # request.files.get('image_2').save(os.path.join(app.config["UPLOADED_PHOTOS_DEST"], image_2))            
+
+                
+                if request.files.get('image_3'):
+                    image_3 = photos.save(request.files.get('image_3'), name=request.files.get('image_3').filename)
+                    item.image_3 = image_3
+                    # request.files.get('image_3').save(os.path.join(app.config["UPLOADED_PHOTOS_DEST"], image_3))
+
+
+                db.session.add(item)
+                flash(f'The product was updated in database','success')
+                db.session.commit()
+                return redirect(url_for('admin_home'))
+
+            else:
+                print(form.errors)
+                flash('The name is already in use','warning')
+                form = Updateitems(obj=item or None)
+                return render_template('admin/item-add.html', form=form, title='Update Product',currentItem=item)
+
+        except Exception as err:
+            print(err)
+            form = Updateitems(obj=item or None)
+            return render_template('admin/item-add.html', form=form, title='Update Product',currentItem=item)
+
+    form = Updateitems(obj=item or None)      
+    return render_template('admin/item-add.html', form=form, title='Update Product',currentItem=item)
+
 
 @app.route('/deleteitem/<int:id>', methods=['POST'])
 @login_required(role="admin")
 def deleteitem(id):
-#     product = Addproduct.query.get_or_404(id)
-#     if request.method =="POST":
-#         try:
-#             os.unlink(os.path.join(current_app.root_path, "static/images/" + product.image_1))
-#             os.unlink(os.path.join(current_app.root_path, "static/images/" + product.image_2))
-#             os.unlink(os.path.join(current_app.root_path, "static/images/" + product.image_3))
-#         except Exception as e:
-#             print(e)
-#         db.session.delete(product)
-#         db.session.commit()
-#         flash(f'The product {product.name} was delete from your record','success')
-#         return redirect(url_for('adim'))
-#     flash(f'Can not delete the product','success')
-#     return redirect(url_for('admin'))
-    return 'delete'
-
+    try:
+        item = Item.query.get_or_404(id)
+        if request.method=="POST":
+            db.session.delete(item)
+            db.session.commit()
+            flash(f"Requested product was deleted from your database","success")
+            return redirect(url_for('admin_home'))
+        flash(f"Error while deleting product","warning")
+    except Exception as err:
+        print(err)
+        flash(f"Error while deleting product","warning")
 
 
 
@@ -180,14 +179,13 @@ def get_category(id):
 
 @app.route('/admin/categories/')
 @login_required(role="admin")
-def getallcategories_admin(id):
+def getallcategories_admin():
     allcategories=[]
     allitems=[]
     try:
         allcategories , allitems = getCategoriesAndItems()
         return render_template('admin/categories-all.html',allcategories=allcategories)
     except Exception as err:
-        
         return render_template('admin/categories-all.html',allcategories=allcategories)
 
 
@@ -196,58 +194,60 @@ def getallcategories_admin(id):
 @login_required(role="admin")
 def addcategory():
     form = Addcategories()
-
     if request.method=="POST":
         try:
             if form.validate_on_submit():
                 name = form.name.data
- 
                 newCategory = Category(name=name)
                 db.session.add(newCategory)
                 flash(f'The category {name} was added in database','success')
                 db.session.commit()
                 return redirect(url_for('admin_home'))
-
             else:
                 print(form.errors)
                 return render_template('admin/category-add.html', form=form, title='Add a Category')
-
         except Exception as err:
             print(err)
-            return render_template('admin/category-add.html', form=form, title='Add a Category')
-
-        
+            return render_template('admin/category-add.html', form=form, title='Add a Category')      
     return render_template('admin/category-add.html', form=form, title='Add a Category')
 
 
 @app.route('/updatecategory/<int:id>',methods=['GET','POST'])
+@login_required(role="admin")
 def updatecategory(id):
-    # if 'email' not in session:
-    #     flash('Login first please','danger')
-    #     return redirect(url_for('login'))
-    # updatecat = Category.query.get_or_404(id)
-    # category = request.form.get('category')  
-    # if request.method =="POST":
-    #     updatecat.name = category
-    #     flash(f'The category {updatecat.name} was changed to {category}','success')
-    #     db.session.commit()
-    #     return redirect(url_for('categories'))
-    # category = updatecat.name
-    # return render_template('products/addbrand.html', title='Update cat',updatecat=updatecat)
-    return 'updatecart'
-
-
+    form = Addcategories()
+    try:
+        cat = Category.query.get_or_404(id)
+        oldname = cat.name
+        newname = request.form.get('name')  
+        if request.method =="POST":
+            cat.name = newname
+            db.session.add(cat)
+            db.session.commit()
+            flash(f'The category {oldname} was changed to {newname}','success')
+            return redirect(url_for('admin_home'))
+        form=Addcategories(obj=cat or None)
+        return render_template('admin/category-add.html', title='Update Category',form=form,getCat=cat)
+    except Exception as err:
+        print(err)
+        flash(f'Some problem during the update','danger')
+        return render_template('admin/category-add.html', title='Update Category',form=form,getCat=cat)
 
 @app.route('/deletecategory/<int:id>', methods=['GET','POST'])
+@login_required(role="admin")
 def deletecategory(id):
-    # category = Category.query.get_or_404(id)
-    # if request.method=="POST":
-    #     db.session.delete(category)
-    #     flash(f"The brand {category.name} was deleted from your database","success")
-    #     db.session.commit()
-    #     return redirect(url_for('admin'))
-    # flash(f"The brand {category.name} can't be  deleted from your database","warning")
-    return 'deletcart'
+    try:
+        category = Category.query.get_or_404(id)
+        if request.method=="POST":
+            db.session.delete(category)
+            db.session.commit()
+            flash(f"Requested category was deleted from your database","success")
+            return redirect(url_for('admin_home'))
+        flash(f"Error while deleting category","warning")
+    except Exception as err:
+        print(err)
+        flash(f"Error while deleting category","warning")
+
 
 #################################### Product Search #################################################
         

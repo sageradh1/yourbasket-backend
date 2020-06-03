@@ -7,7 +7,7 @@ class Config(object):
     TESTING = False
 
     GENERATED_CUSTOMER_INVOICE_FOLDER= basedir+"/app/static/static/pdf/customer_invoices"
-    UPLOADED_PHOTOS_DEST = basedir+ '/app/static/static/item-images'
+    UPLOADED_PHOTOS_DEST = basedir+ '/app/static/images/item-images'
     DEFAULT_PHOTO_FOR_ITEMS = "no-image.png"
 
     # THUMBNAIL_FOR_UPLOADED_VIDEO_FOLDER = basedir+"/app/static/img/generated/thumbnails"

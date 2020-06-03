@@ -43,7 +43,7 @@ class Item(db.Model):
         return newItem
 
     def __repr__(self):
-        return '<Item %r price %r left %r%r categoryid %r >' % self.name,str(self.price),str(self.left_quantity),self.quantity_measuring_unit,self.category_id
+        return '<Item {} price {} left {}{} categoryid {} >'.format(self.name,str(self.price),str(self.left_quantity),self.quantity_measuring_unit,str(self.category_id))
     
 
 class Category(db.Model):
