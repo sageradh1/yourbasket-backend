@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+{% include 'staff/_staff_navbar.html' %}
+
+<div class="container">
+    {% include '_messages.html' %}
+  
+    <h4>Categories</h4>
+    <table class="table tbale-sm">
+        <thead>
+            <th>Sn</th>           
+            <th>Name</th>          
+
+        </thead>
+        <tbody>
+          {% for eachcategory in allcategories %}
+          <div class="row">
+            <tr>
+              <td>{{loop.index}}</td>
+              <td>{{ eachcategory.name }}</td>
+             
+            </tr>
+          </div>
+          {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock content %}

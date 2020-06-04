@@ -1,0 +1,109 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include 'admin/_admin_navbar.html' %}
+<!--==========END NAVBAR ==============-->
+{% from "_formhelpers.html" import render_field %}
+
+<div class="container">
+    {% include '_messages.html' %}
+    <div class="row">
+        <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <div class="text-center bg-info p-2 h4">
+                    {% if currentStaff %}
+                    Update
+                    {% else %}
+                    Add
+                    {% endif %} staff</div>
+                
+                <form action="" method="post" enctype="multipart/form-data">
+                    {{ form.csrf_token }}
+                <div class="row">
+                    <div class="col-12 text-center">
+                        {% if currentStaff %} {{ render_field(form.id, class="form-control",type="hidden") }} {%endif%}
+                    </div>
+                </div>   
+                    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+            
+                        <div class="row">
+                            
+                            <div class="col-md-2"></div>
+            
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-6 text-center px-3">
+                                        {{ render_field(form.first_name, class="form-control")}}             
+                                    </div>
+                                    <div class="col-md-6 text-center px-3">
+                                        {{ render_field(form.last_name, class="form-control")}}         
+                                    </div>
+                                </div>
+            
+            
+                                <div class="row">
+                                    <div class="col-md-6 text-center">
+                                        {{ render_field(form.username,class="form-control")}}
+                                         
+                                    </div>
+                                    <div class="col-md-6 text-center">
+                                        {{ render_field(form.email,class="form-control")}}        
+                                    </div>
+                                </div>
+            
+            
+                                <div class="row">
+                                    <div class="col-md-6 text-center">
+                                        {{ render_field(form.password, class="form-control")}}
+                                                    
+                                    </div>
+                                    <div class="col-md-6 text-center">
+                                        {{ render_field(form.confirm ,class="form-control")}}       
+                                    </div>
+                                </div>
+            
+            
+                                <div class="row">
+                                    <div class="col-md-6 text-center">
+                                        {{ render_field(form.city, class="form-control")}}
+                                        
+                                    </div>
+                                    <div class="col-md-6 text-center">
+                                        {{ render_field(form.contactnumber, class="form-control",type="number")}}         
+                                    </div>
+                                </div>
+            
+                                <div class="row">
+                                    <div class="col-md-6 text-center">
+                                        {{ render_field(form.address, class="form-control")}}
+                                       
+                                    </div>
+                                    <div class="col-md-6 text-center">
+                                        {{ render_field(form.dob ,class="form-control",type="date")}}       
+                                    </div>
+                                </div>
+            
+
+                            </div>
+                
+                            <div class="col-md-2"></div>
+                        </div>    
+                        
+
+
+                    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+                
+                
+                <div class="row ">
+                    <div class="col text-center">
+                        <input type="submit" value="{% if currentStaff %}Update {% else %}Add{% endif %} staff" class="btn btn-success" />
+                    </div>
+                </div>
+                
+                
+                </form>
+            </div>
+      <div class="col-md-1"></div>
+    </div>
+</div>
+{% endblock content %}

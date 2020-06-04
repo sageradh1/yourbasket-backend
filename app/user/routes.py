@@ -4,7 +4,6 @@ from flask import flash,redirect,url_for,render_template
 from .models import User
 from .forms import LoginForm
 
-
 from app.product.productutils import getCategoriesAndItems
 
 @app.route('/login', methods=['GET','POST'])
@@ -15,6 +14,9 @@ def login():
     if (current_user.is_authenticated and current_user.urole=="customer"):
         flash("You will have to logout first ! ",'danger')
         return redirect(url_for('customer_home'))
+    if (current_user.is_authenticated and current_user.urole=="staff"):
+        flash("You will have to logout first ! ",'danger')
+        return redirect(url_for('staff_home'))
 
     form = LoginForm()
     if form.validate_on_submit():
@@ -23,20 +25,23 @@ def login():
         if user:
             if User.check_password(user,form.password.data):
                 login_user(user)
-                user.is_active=True
+                user.is_user_active=True
                 User.save_to_db(user)
 
 
                 if user.urole=="admin":
                     flash(f'Welcome Admin!! You are now logged in.','success')
                     return redirect(url_for('admin_home'))
+                elif user.urole=="staff":
+                    flash(f'Welcome Staff!! You are now logged in.','success')
+                    return redirect(url_for('staff_home'))
                 else:
                     flash(f'Welcome !! You are now logged in.','success')
                     return redirect(url_for('customer_home'))
-                
+            
             else:
                 flash(f'Invalid Credentials', 'success')
-                return redirect(url_for('admin_login'))               
+                return redirect(url_for('login'))               
 
         else:
             flash(f'Username does not exist', 'success')

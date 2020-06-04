@@ -6,7 +6,7 @@ from .productutils import getCategoriesAndItems,unnullifystring
 from .forms import Additems,Addcategories,Updateitems
 import os
 
-################################ Item ################################################### 
+# ++++++++++++++++++++++++++++++++++++ Item +++++++++++++++++++++++++++++++++++++++++++++ 
 @app.route('/item/<int:id>')
 def item_details_page(id):
     allcategories=[]
@@ -19,6 +19,7 @@ def item_details_page(id):
         product = Item.get_empty_item()
         return render_template('product/items_details.html',item=item,allcategories=allcategories,allitems=allitems)
 
+############## Admin ############## 
 @app.route('/admin/items/')
 @login_required(role="admin")
 def getallitems_admin():
@@ -151,13 +152,24 @@ def deleteitem(id):
         print(err)
         flash(f"Error while deleting product","warning")
 
+############## Admin End ##############
 
 
+############## Staff End ##############
+@app.route('/staff/items/')
+@login_required(role="staff")
+def getallitems_staff():
+    allcategories=[]
+    allitems=[]
+    try:
+        allcategories , allitems = getCategoriesAndItems()
+        return render_template('staff/items-all.html',allitems=allitems,allcategories=allcategories)
+    except Exception as err:
+        return render_template('staff/items-all.html',allitems=allitems,allcategories=allcategories)
+############## Staff End ##############
+# ++++++++++++++++++++++++++++++++++++End Item +++++++++++++++++++++++++++++++++++++++++++++ 
 
-################################ Categories ###################################################
-
-
-
+# ++++++++++++++++++++++++++++++++++++ Categories +++++++++++++++++++++++++++++++++++++++++++++ 
 @app.route('/categories/<int:id>')
 def get_category(id):
     allcategories=[]
@@ -177,7 +189,7 @@ def get_category(id):
         print(err)
         return render_template('product/items_in_category.html',get_cat_prod=get_cat_product,number_of_itemsperpage=number_of_itemsperpage,get_cat=cat,allcategories=allcategories,allitems=allitems)
 
-
+############## Admin ##############
 @app.route('/admin/categories/')
 @login_required(role="admin")
 def getallcategories_admin():
@@ -248,10 +260,24 @@ def deletecategory(id):
     except Exception as err:
         print(err)
         flash(f"Error while deleting category","warning")
+############## Admin End ##############
 
 
-#################################### Product Search #################################################
-        
+############## Staff ##############
+@app.route('/staff/categories/')
+@login_required(role="staff")
+def getallcategories_staff():
+    allcategories=[]
+    allitems=[]
+    try:
+        allcategories , allitems = getCategoriesAndItems()
+        return render_template('staff/categories-all.html',allcategories=allcategories)
+    except Exception as err:
+        return render_template('staff/categories-all.html',allcategories=allcategories)
+############## Staff End ##############
+# ++++++++++++++++++++++++++++++++++++ Category End +++++++++++++++++++++++++++++++++++++++++++++ 
+
+# ++++++++++++++++++++++++++++++++++++ Product search +++++++++++++++++++++++++++++++++++++++++++++      
 @app.route('/result')
 def result():
     allcategories , allitems = getCategoriesAndItems()

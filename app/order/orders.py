@@ -26,6 +26,9 @@ def make_order():
             db.session.commit()
             session.pop('Shoppingcart')
             flash('Your order has been sent successfully','success')
+
+            #TODO reduce left quantity after every order
+
             return redirect(url_for('orders',invoice_number=invoice_number))
         except Exception as e:
             print(e)
@@ -55,7 +58,7 @@ def orders(invoice_number):
             return redirect(url_for('customer_home'))
 
     else:
-        return redirect(url_for('customer_login'))
+        return redirect(url_for('login'))
     
 @app.route('/get_pdf/<invoice_number>', methods=['POST'])
 @login_required(role="customer")
@@ -65,7 +68,6 @@ def get_pdf(invoice_number):
         subTotal = 0
         customer_id = current_user.id
         if request.method =="POST":
-
             try:
                 customer = User.query.filter_by(id=customer_id).first()
                 orders = CustomerOrder.query.filter_by(customer_id=customer_id, invoice_number=invoice_number).order_by(CustomerOrder.id.desc()).first()
@@ -75,9 +77,7 @@ def get_pdf(invoice_number):
                     subTotal -= discount
                     tax = ("%.2f" % (.00 * float(subTotal)))
                     grandTotal = float("%.2f" % (1.00 * subTotal))
-
                 rendered =  render_template('order/pdf.html', invoice_number=invoice_number, tax=tax,grandTotal=grandTotal,customer=customer,orders=orders)
-                
                 return rendered
                 pdffile = app.config['GENERATED_CUSTOMER_INVOICE_FOLDER'] + '/'+invoice_number+'.pdf'
                 # pdffile = app.config['GENERATED_CUSTOMER_INVOICE_FOLDER'] + '/'+'demo'+'.pdf'
@@ -106,25 +106,66 @@ def thankyou():
 
 @app.route('/customer/orders')
 @login_required(role="customer")
-def customer_orders(invoice_number):
+def customer_orders():
     if current_user.is_authenticated:
         grandTotal = 0
         subTotal = 0
         customer_id = current_user.id
         customer = User.query.filter_by(id=customer_id).first()
-        orders = CustomerOrder.query.filter_by(customer_id=customer_id, invoice_number=invoice_number).order_by(CustomerOrder.id.desc()).all()
+        allorders = CustomerOrder.query.filter_by(customer_id=customer_id).order_by(CustomerOrder.id.desc()).all()
+        listofTupleDTG = []
         try:
-            for _key, product in orders.orders.items():
-                discount = (product['discount']/100) * float(product['price'])
-                subTotal += float(product['price']) * int(product['quantity'])
-                subTotal -= discount
-                tax = ("%.2f" % (.00 * float(subTotal)))
-                grandTotal = ("%.2f" % (1.00 * float(subTotal)))
-            return render_template('order/orderpage.html', invoice_number=invoice_number, tax=tax,subTotal=subTotal,grandTotal=grandTotal,customer=customer,orders=orders)
+            for eachorder in allorders:
+                discount=0
+                subTotal=0
+                tax=0
+                grandTotal=0
+                for _key, product in eachorder.orders.items():
+                    discount = (product['discount']/100) * float(product['price'])
+                    subTotal += float(product['price']) * int(product['quantity'])
+                    subTotal -= discount
+                    tax = ("%.2f" % (.00 * float(subTotal)))
+                    grandTotal = ("%.2f" % (1.00 * float(subTotal)))
+                listofTupleDTG.append((eachorder.invoice_number,eachorder.status,eachorder.date_created,discount,tax,grandTotal))
+            # print(listofTupleDTG)
+            return render_template('customer/orders-all.html', listofTupleDTG=listofTupleDTG)
         except Exception as err:
             print(err)
             flash("No orders found!",'danger')
             return redirect(url_for('customer_home'))
 
     else:
-        return redirect(url_for('customer_login'))
+        return redirect(url_for('login'))
+
+
+
+
+# +++++++++++++++++++++++++++++++++++ Staff ++++++++++++++++++++++++++++++++++++++++++++++++++++
+@app.route('/staff/orders')
+@login_required(role="staff")
+def getallorders_staff():
+
+    allorders = CustomerOrder.query.order_by(CustomerOrder.id.desc()).all()
+    listofTupleDTG = []
+    try:
+        for eachorder in allorders:
+            discount=0
+            subTotal=0
+            tax=0
+            grandTotal=0
+            for _key, product in eachorder.orders.items():
+                discount = (product['discount']/100) * float(product['price'])
+                subTotal += float(product['price']) * int(product['quantity'])
+                subTotal -= discount
+                tax = ("%.2f" % (.00 * float(subTotal)))
+                grandTotal = ("%.2f" % (1.00 * float(subTotal)))
+            listofTupleDTG.append((eachorder.invoice_number,eachorder.status,eachorder.date_created,discount,tax,grandTotal))
+        # print(listofTupleDTG)
+        return render_template('staff/orders-all.html', listofTupleDTG=listofTupleDTG)
+    except Exception as err:
+        print(err)
+        flash("No orders found!",'danger')
+        return redirect(url_for('staff_home'))
+
+
+# +++++++++++++++++++++++++++++++++++ End Staff ++++++++++++++++++++++++++++++++++++++++++++++++

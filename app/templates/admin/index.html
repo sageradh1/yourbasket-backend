@@ -6,7 +6,81 @@
 <!--==========END NAVBAR ==============-->
 <div class="container">
     {% include '_messages.html' %}
-    
+    <!-- ======================================= Staff ==================================== -->
+
+  <h4>Staffs</h4>
+  <table class="table tbale-sm">
+      <thead>
+          <th>Sn</th>           
+          <th>Name</th>
+          <th>Username</th>
+          <th>Contact Number</th>
+          <th>Email</th>
+          <th>Address</th>
+          <th>City</th>
+          <th>Status</th>
+          <th>Edit</th>
+          <th>Delete</th>
+      </thead>
+      <tbody>
+        {% for eachstaff in allstaffs %}
+        <div class="row">
+          <tr>
+            <td>{{loop.index}}</td>
+            <td>{{ eachstaff.first_name }} {{ eachstaff.last_name }}</td>
+            <td>{{ eachstaff.username }}</td> 
+            
+            <td>{{ eachstaff.contactnumber }}</td> 
+            <td>{{ eachstaff.email }}</td> 
+            <td>{{ eachstaff.address }}</td> 
+            <td>{{ eachstaff.city }}</td> 
+            <td>
+              {% if eachstaff.is_user_active %}
+                Active
+              {% else %}
+                Offline
+              {% endif %}
+            </td>        
+
+            <td> <a href="{{url_for('updatestaff', id=eachstaff.id)}}" class="btn btn-sm btn-info">Edit </a> </td>
+            <td><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#exampleModal-{{eachstaff.id}}">
+              Delete
+            </button></td>
+          </tr>
+        </div>
+        
+
+        <!--============= MODEL ===================-->
+      <div class="modal fade" id="exampleModal-{{eachstaff.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">{{eachstaff.username }}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p class="text-danger">Are you sure that you want to delete this staff '{{ eachstaff.username }}'' ?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <form action="{{url_for('deletestaff',id=eachstaff.id)}}" method="post">
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+        <!--==============MODEL ===================-->
+
+        {% endfor %}
+      </tbody>
+  </table>
+
+
+
 
   <!-- =======================================Category==================================== -->
 
@@ -63,8 +137,7 @@
           {% endfor %}
         </tbody>
     </table>
-
-
+ 
 
 
     <!-- =======================================Product==================================== -->

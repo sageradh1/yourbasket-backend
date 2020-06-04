@@ -23,11 +23,6 @@
     <table class="table tbale-sm">
         <thead>
 
-             = db.Column(db.String(20), unique=True, nullable=False)
-             = db.Column(db.String(20), default='Ordered', nullable=False)
-            customer_id = db.Column(db.Integer, unique=False, nullable=False)
-             = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-            orders = db.Column(JsonEcodedDict)
             <th>Sn</th>
             <th>Invoice Number</th>
             <th>Status</th>
@@ -37,59 +32,26 @@
             <th>Grandtotal</th>
         </thead>
         <tbody>
-          {% for order in allorders %}
+          {% for eachorder in listofTupleDTG %}
           <div class="row">
             <tr>
               <td>{{loop.index}}</td>
-              <td> <img src="{{url_for('static',filename='images/item-images/' + order.image_1)}}" alt="{{order.name}}" width="50" height="20"></td>
-              <td>{{ order.invoice_number }}</td>
-              <td>{{ order.status }}</td>
-              <td>{{ order.date_created }}</td>
+              <td>{{ eachorder[0] }}</td>
+              <td>{{  eachorder[1] }}</td>
+              <td>{{  eachorder[2] }}</td>
               
               
-              <td>{{ order.discount}}</td>
-              <td>{{ order.tax}}</td>
-              <td>{{ order.grandtotal}}</td>
+              <td>{{  eachorder[3]}}</td>
+              <td>{{  eachorder[4]}}</td>
+              <td>{{  eachorder[5]}}</td>
               
-              <td>
-                {% for eachcategory in allcategories %}
-                  {% if eachcategory.id == order.category_id %}
-                    {{ eachcategory.name}}
-                  {% endif %}               
-                {% endfor %}
-              </td>
+
   
               
               
             </tr>
           </div>
           
-
- <!--============= MODEL ===================-->
-        <div class="modal fade" id="exampleModal-{{order.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">{{order.name }}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <p class="text-danger">Are you sure that you want to delete this product called {{ order.name }} ?</p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <form action="{{url_for('deleteorder',id=order.id)}}" method="post">
-                  <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
-                
-              </div>
-            </div>
-          </div>
-        </div>
-          <!--==============MODEL ===================-->
-
           {% endfor %}
         </tbody>
     </table>

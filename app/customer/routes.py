@@ -51,17 +51,16 @@ def customer_register():
     form = CustomerRegisterForm()
     if form.validate_on_submit():
         try:
-
             user = User(first_name=form.first_name.data,last_name=form.last_name.data,dob=form.dob.data, username=form.username.data, email=form.email.data, city=form.city.data,contactnumber=form.contactnumber.data, address=form.address.data)
             User.set_password(user,form.password.data)
             db.session.add(user)
             flash(f'Welcome {form.first_name.data}!! Thank you for registering', 'success')
             db.session.commit()
-            return redirect(url_for('customer_login'))
+            return redirect(url_for('login'))
         except Exception as err:
             print(err)
             flash('Problem while registering','danger')
-            return redirect(url_for('customer_login'))
+            return redirect(url_for('login'))
 
     return render_template('customer/register.html', form=form,allcategories=allcategories,allitems=allitems)
 
@@ -69,5 +68,9 @@ def customer_register():
 @app.route('/customer/logout')
 @login_required(role="customer")
 def customer_logout():
+    
+    currentuser= User.get_or_404(current_user.id)
+    currentuser.is_active=False
+    User.save_to_db(currentuser)
     logout_user()
     return redirect(url_for('customer_home'))

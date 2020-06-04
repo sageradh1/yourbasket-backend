@@ -87,7 +87,6 @@ search.init_app(app)
 from app.user import models #also has load_user for Loginmanager 
 from app.product import models
 from app.order import models
-# from app.admin import models
 
 #Loading routes/views
 from app.user import routes
@@ -96,6 +95,7 @@ from app.product import routes
 from app.cart import carts
 from app.order import orders
 from app.admin import routes
+from app.staff import routes
 
 
 # # Admin Dashboard feature

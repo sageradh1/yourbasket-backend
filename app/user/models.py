@@ -21,7 +21,7 @@ class User(UserMixin,db.Model):
     address = db.Column(db.String)
     city = db.Column(db.String)
 
-    is_active = db.Column(db.Boolean,default=False)
+    is_user_active = db.Column(db.Boolean,default=False)
     urole = db.Column(db.String(80),default="customer")
 
     def set_password(self, password):

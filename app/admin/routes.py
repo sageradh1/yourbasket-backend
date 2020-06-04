@@ -3,8 +3,10 @@ from app import app,db,login_required
 from .forms import AdminLoginForm
 from app.product.models import Item,Category
 from app.product.productutils import getCategoriesAndItems
+from app.staff.staffutils import getStaffs
 from app.user.models import User
 from flask_login import login_user,logout_user,current_user
+
 
 # @app.route('/admin/login', methods=['GET','POST'])
 # def admin_login():
@@ -28,6 +30,10 @@ from flask_login import login_user,logout_user,current_user
 @app.route('/admin/logout')
 @login_required(role="admin")
 def admin_logout():
+    
+    currentuser= User.query.get_or_404(current_user.id)
+    currentuser.is_active=False
+    User.save_to_db(currentuser)
     logout_user()
     return redirect(url_for('admin_home'))
 
@@ -35,11 +41,12 @@ def admin_logout():
 @login_required(role="admin")
 def admin_home():
     allcategories , allitems = getCategoriesAndItems()
-    return render_template('admin/index.html', title='Admin page',allcategories=allcategories , allitems=allitems)
+    allstaffs = getStaffs()
+    return render_template('admin/index.html', title='Admin page',allcategories=allcategories , allitems=allitems,allstaffs=allstaffs)
 
-@app.route('/categories')
-@login_required(role="admin")
-def admin_categories():
-    categories = Category.query.order_by(Category.id.desc()).all()
-    return render_template('admin/brand.html', title='categories',categories=categories)
+# @app.route('/categories')
+# @login_required(role="admin")
+# def admin_categories():
+#     categories = Category.query.order_by(Category.id.desc()).all()
+#     return render_template('admin/brand.html', title='categories',categories=categories)
 

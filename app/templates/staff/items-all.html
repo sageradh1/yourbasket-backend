@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+{% include 'staff/_staff_navbar.html' %}
+
+<div class="container">
+    {% include '_messages.html' %}
+  
+
+    <!-- =======================================Product==================================== -->
+    <h4>Products</h4>
+    <table class="table tbale-sm">
+        <thead>
+            <th>Sn</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Discount</th>
+            <th>Available Stock</th>
+            <th>Measured in </th>
+            <th>Description</th>
+            <th>Category</th>
+  
+        </thead>
+        <tbody>
+          {% for item in allitems %}
+          <div class="row">
+            <tr>
+              <td>{{loop.index}}</td>
+              <td> <img src="{{url_for('static',filename='images/item-images/' + item.image_1)}}" alt="{{item.name}}" width="50" height="20"></td>
+              <td>{{ item.name }}</td>
+              <td>{{ item.price }}</td>
+              <td>{{ item.discount }}</td>
+              <td>{{ item.left_quantity}}</td>
+              <td>{{ item.quantity_measuring_unit}}</td>
+              <td>{{ item.desc}}</td>
+              <td>
+                {% for eachcategory in allcategories %}
+                  {% if eachcategory.id == item.category_id %}
+                    {{ eachcategory.name}}
+                  {% endif %}               
+                {% endfor %}
+              </td>
+            </tr>
+          </div>
+          {% endfor %}
+        </tbody>
+    </table>
+
+
+</div>
+{% endblock content %}

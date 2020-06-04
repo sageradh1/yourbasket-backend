@@ -73,11 +73,20 @@
         {% endif %}
           <li class="nav-item">
             <a href="{{url_for('getCart')}}" class="nav-link"> Cart ({{ session['Shoppingcart']|length }}) </a>
-          </li>			
+          </li>		
+          
+          {% if current_user.is_authenticated %}
+
+          <li class="nav-item">
+            <a href="{{url_for('customer_orders')}}" class="nav-link"> View Orders </a>
+          </li>	
+          {% endif %}
 
           <li class="nav-item">
             <a href="{{url_for('about_us')}}" class="nav-link"> About us </a>
           </li>	
+
+
       </ul>
       <form class="form-inline my-2 my-lg-0" action="{{url_for('result')}}">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q">

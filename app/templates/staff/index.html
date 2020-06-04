@@ -1,0 +1,102 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+{% include 'staff/_staff_navbar.html' %}
+
+<div class="container">
+    {% include '_messages.html' %}
+  
+    <h4>Categories</h4>
+    <table class="table tbale-sm">
+        <thead>
+            <th>Sn</th>           
+            <th>Name</th>          
+
+        </thead>
+        <tbody>
+          {% for eachcategory in allcategories %}
+          <div class="row">
+            <tr>
+              <td>{{loop.index}}</td>
+              <td>{{ eachcategory.name }}</td>
+             
+            </tr>
+          </div>
+          {% endfor %}
+        </tbody>
+    </table>
+ 
+
+
+ 
+    <!-- =======================================Product==================================== -->
+    <h4>Products</h4>
+    <table class="table tbale-sm">
+        <thead>
+            <th>Sn</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Discount</th>
+            <th>Available Stock</th>
+            <th>Measured in </th>
+            <th>Description</th>
+            <th>Category</th>
+  
+        </thead>
+        <tbody>
+          {% for item in allitems %}
+          <div class="row">
+            <tr>
+              <td>{{loop.index}}</td>
+              <td> <img src="{{url_for('static',filename='images/item-images/' + item.image_1)}}" alt="{{item.name}}" width="50" height="20"></td>
+              <td>{{ item.name }}</td>
+              <td>{{ item.price }}</td>
+              <td>{{ item.discount }}</td>
+              <td>{{ item.left_quantity}}</td>
+              <td>{{ item.quantity_measuring_unit}}</td>
+              <td>{{ item.desc}}</td>
+              <td>
+                {% for eachcategory in allcategories %}
+                  {% if eachcategory.id == item.category_id %}
+                    {{ eachcategory.name}}
+                  {% endif %}               
+                {% endfor %}
+              </td>
+            </tr>
+          </div>
+          {% endfor %}
+        </tbody>
+    </table>
+
+        <!-- =======================================Order==================================== -->
+        <h4>Orders</h4>
+        <table class="table tbale-sm">
+            <thead>
+    
+                <th>Sn</th>
+                <th>Invoice Number</th>
+                <th>Status</th>
+                <th>Ordered Date</th>
+                <th>Discount</th>
+                <th>Tax</th>
+                <th>Grandtotal</th>
+            </thead>
+            <tbody>
+              {% for eachorder in listofTupleDTG %}
+              <div class="row">
+                <tr>
+                  <td>{{loop.index}}</td>
+                  <td>{{ eachorder[0] }}</td>
+                  <td>{{  eachorder[1] }}</td>
+                  <td>{{  eachorder[2] }}</td>            
+                  <td>{{  eachorder[3]}}</td>
+                  <td>{{  eachorder[4]}}</td>
+                  <td>{{  eachorder[5]}}</td>      
+                </tr>
+              </div>      
+              {% endfor %}
+            </tbody>
+        </table>
+</div>
+{% endblock content %}
