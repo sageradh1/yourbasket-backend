@@ -2,9 +2,11 @@ from flask import session,flash,redirect,url_for,render_template,request,make_re
 from flask_login import current_user
 from app import app,db,login_required
 from .models import CustomerOrder
+from .forms import UpdateOrderByStaff
 from app.user.models import User
 import secrets
 import pdfkit
+from app.product.productutils import getCategoriesAndItems
 
 def updateshoppingcart():
     for key, shopping in session['Shoppingcart'].items():
@@ -13,6 +15,7 @@ def updateshoppingcart():
 
     return updateshoppingcart
 
+# +++++++++++++++++++++++++++++++++++ Customer ++++++++++++++++++++++++++++++++++++++++++++++++++++
 @app.route('/makeorder')
 @login_required(role="customer")
 def make_order():
@@ -44,7 +47,10 @@ def orders(invoice_number):
         customer_id = current_user.id
         customer = User.query.filter_by(id=customer_id).first()
         orders = CustomerOrder.query.filter_by(customer_id=customer_id, invoice_number=invoice_number).order_by(CustomerOrder.id.desc()).first()
+        allcategories=[]
+        allitems=[]
         try:
+            allcategories , allitems = getCategoriesAndItems()
             for _key, product in orders.orders.items():
                 discount = (product['discount']/100) * float(product['price'])
                 subTotal += float(product['price']) * int(product['quantity'])
@@ -55,8 +61,7 @@ def orders(invoice_number):
         except Exception as err:
             print(err)
             flash("No orders found!",'danger')
-            return redirect(url_for('customer_home'))
-
+            return redirect(url_for('customer_home',allcategories=allcategories,allitems=allitems))
     else:
         return redirect(url_for('login'))
     
@@ -101,7 +106,8 @@ def get_pdf(invoice_number):
 @app.route('/thankyou')
 @login_required(role="customer")
 def thankyou():
-    return render_template('order/thankyou.html')
+    allcategories , allitems = getCategoriesAndItems()
+    return render_template('order/thankyou.html',allcategories=allcategories)
 
 
 @app.route('/customer/orders')
@@ -114,6 +120,8 @@ def customer_orders():
         customer = User.query.filter_by(id=customer_id).first()
         allorders = CustomerOrder.query.filter_by(customer_id=customer_id).order_by(CustomerOrder.id.desc()).all()
         listofTupleDTG = []
+        
+        allcategories , allitems = getCategoriesAndItems()
         try:
             for eachorder in allorders:
                 discount=0
@@ -128,15 +136,15 @@ def customer_orders():
                     grandTotal = ("%.2f" % (1.00 * float(subTotal)))
                 listofTupleDTG.append((eachorder.invoice_number,eachorder.status,eachorder.date_created,discount,tax,grandTotal))
             # print(listofTupleDTG)
-            return render_template('customer/orders-all.html', listofTupleDTG=listofTupleDTG)
+            return render_template('customer/orders-all.html', listofTupleDTG=listofTupleDTG,allcategories=allcategories)
         except Exception as err:
             print(err)
             flash("No orders found!",'danger')
-            return redirect(url_for('customer_home'))
+            return redirect(url_for('customer_home',allcategories=allcategories,allitems=allitems))
 
     else:
         return redirect(url_for('login'))
-
+# +++++++++++++++++++++++++++++++++++ Customer ++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 
@@ -159,13 +167,31 @@ def getallorders_staff():
                 subTotal -= discount
                 tax = ("%.2f" % (.00 * float(subTotal)))
                 grandTotal = ("%.2f" % (1.00 * float(subTotal)))
-            listofTupleDTG.append((eachorder.invoice_number,eachorder.status,eachorder.date_created,discount,tax,grandTotal))
-        # print(listofTupleDTG)
+            listofTupleDTG.append((eachorder.invoice_number,eachorder.status,eachorder.date_created,discount,tax,grandTotal,eachorder.id))
+        print(listofTupleDTG)
         return render_template('staff/orders-all.html', listofTupleDTG=listofTupleDTG)
     except Exception as err:
         print(err)
         flash("No orders found!",'danger')
         return redirect(url_for('staff_home'))
 
+@app.route('/staff/updateorder/<int:id>',methods=['GET','POST'])
+@login_required(role="staff")
+def updateorder_staff(id):
+    form = UpdateOrderByStaff()
+    try:
+        order = CustomerOrder.query.get_or_404(id)
+        if request.method =="POST":
+            order.status = request.form.get('orderstatus')
+            db.session.add(order)
+            db.session.commit()
+            flash(f'The status of order with invoice number {order.invoice_number} has been changed to {order.status}','success')
+            return redirect(url_for('staff_home'))
+        form=UpdateOrderByStaff(obj=order or None)
+        return render_template('staff/order-update.html', title='Update Order',form=form,currentOrder=order)
+    except Exception as err:
+        print(err)
+        flash(f'Some problem during the update','danger')
+        return render_template('staff/order-update.htm', title='Update Order',form=form,currentOrder=order)
 
 # +++++++++++++++++++++++++++++++++++ End Staff ++++++++++++++++++++++++++++++++++++++++++++++++

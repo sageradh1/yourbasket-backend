@@ -4,6 +4,7 @@ from .forms import StaffRegisterForm,StaffUpdateForm
 from app.product.productutils import getCategoriesAndItems
 from app.staff.staffutils import getStaffs
 from app.user.models import User
+from app.order.models import CustomerOrder
 from flask_login import login_user,logout_user,current_user
 
 
@@ -11,8 +12,31 @@ from flask_login import login_user,logout_user,current_user
 @app.route('/staff/')
 @login_required(role="staff")
 def staff_home():
-    allcategories , allitems = getCategoriesAndItems()
-    return render_template('staff/index.html', title='staff page',allcategories=allcategories ,allitems=allitems)
+    allcategories =[]
+    allitems = []
+    allorders = []
+    listofTupleDTG = []
+    try:
+        allcategories , allitems = getCategoriesAndItems()
+        allorders = CustomerOrder.query.order_by(CustomerOrder.id.desc()).all()
+        for eachorder in allorders:
+            discount=0
+            subTotal=0
+            tax=0
+            grandTotal=0
+            for _key, product in eachorder.orders.items():
+                discount = (product['discount']/100) * float(product['price'])
+                subTotal += float(product['price']) * int(product['quantity'])
+                subTotal -= discount
+                tax = ("%.2f" % (.00 * float(subTotal)))
+                grandTotal = ("%.2f" % (1.00 * float(subTotal)))
+            listofTupleDTG.append((eachorder.invoice_number,eachorder.status,eachorder.date_created,discount,tax,grandTotal,eachorder.id))
+        print(listofTupleDTG)
+        return render_template('staff/index.html', title='Staff page',allcategories=allcategories ,allitems=allitems,listofTupleDTG=listofTupleDTG)
+    except Exception as err:
+        print(err)
+        flash("Problem while fetching home page for staff",'danger')
+        return render_template('staff/index.html', title='Staff page',allcategories=allcategories ,allitems=allitems,listofTupleDTG=listofTupleDTG)
 
 #login is common
 
@@ -21,7 +45,7 @@ def staff_home():
 def staff_logout():
     
     currentuser= User.find_by_id(current_user.id)
-    currentuser.is_active=False
+    currentuser.is_user_active=False
     User.save_to_db(currentuser)
     logout_user()
     return redirect(url_for('staff_home'))

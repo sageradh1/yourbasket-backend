@@ -17,7 +17,7 @@
             <p>Discount: {{item.discount}} % </p>
             {% endif %}
             <hr>
-            <b>Product discription</b>
+            <b>Product description</b>
             <p>{{item.desc}}</p>
             <form action="{{url_for('addtocart')}}" method="post">
                 <input type="hidden" name="item_id" value="{{item.id}}">

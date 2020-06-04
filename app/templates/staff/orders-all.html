@@ -1,1 +1,42 @@
-order page for staffs
+{% extends 'layout.html' %}
+{% block content %}
+
+{% include 'staff/_staff_navbar.html' %}
+
+<div class="container">
+    {% include '_messages.html' %}
+  
+        <!-- =======================================Order==================================== -->
+        <h4>Orders</h4>
+        <table class="table tbale-sm">
+            <thead>
+    
+                <th>Sn</th>
+                <th>Invoice Number</th>
+                <th>Status</th>
+                <th>Ordered Date</th>
+                <th>Discount</th>
+                <th>Tax</th>
+                <th>Grandtotal</th>
+                <th>Change Status</th>
+            </thead>
+            <tbody>
+              {% for eachorder in listofTupleDTG %}
+              <div class="row">
+                <tr>
+                  <td>{{loop.index}}</td>
+                  <td>{{ eachorder[0] }}</td>
+                  <td>{{  eachorder[1] }}</td>
+                  <td>{{  eachorder[2] }}</td>            
+                  <td>{{  eachorder[3]}}</td>
+                  <td>{{  eachorder[4]}}</td>
+                  <td>{{  eachorder[5]}}</td>
+                  <td> <a href="{{url_for('updateorder_staff', id=eachorder[6])}}" class="btn btn-sm btn-info">Edit </a> </td>
+ 
+                </tr>
+              </div>      
+              {% endfor %}
+            </tbody>
+        </table>
+</div>
+{% endblock content %}

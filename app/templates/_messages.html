@@ -1,3 +1,19 @@
+<style>
+  .alert.success {
+      background-color:#ffedf2;
+      color: green;
+    }
+    
+    .alert.danger {
+      background-color:#ffedf2;
+      color:#f00;
+    }
+    .alert-message {
+      background-color:#ffedf2;
+      color: green;
+    }
+  </style>
+
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     <div class=flashes>

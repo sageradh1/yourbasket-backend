@@ -26,4 +26,11 @@ class CustomerOrder(db.Model):
     def __repr__(self):
         return'<CustomerOrder %r>' % self.invoice
 
+class OrderStatus(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), unique=True, nullable=False)
+
+    def __repr__(self):
+        return'<OrderStatus %r>' % self.name
+
 db.create_all()

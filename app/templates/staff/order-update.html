@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include 'staff/_staff_navbar.html' %}
+
+{% from "_formhelpers.html" import render_field %}
+
+<div class="container">
+    {% include '_messages.html' %}
+    <div class="row">
+        <div class="col-md-1"></div>
+        
+        <div class="col-md-10">
+                <div class="text-center bg-info p-2 h5">
+                    Update Order
+                </div>
+                
+                <form action="" method="post" enctype="multipart/form-data">
+                    {{ form.csrf_token }}
+                    <div class="row">
+                        <div class="col-md-6 text-center px-3">
+                            {{ render_field(form.id, class="form-control",readonly=true) }}            
+                        </div>
+                        <div class="col-md-6 text-center px-3">
+                            {{ render_field(form.invoice_number, class="form-control",readonly=true) }}         
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 text-center px-3">
+                            {{ render_field(form.status, class="form-control",readonly=true) }} 
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 text-center px-3">
+                            {{ render_field(form.orderstatus, class="form-control") }} 
+                        </div>
+                    </div>
+
+             
+    
+                    <div class="row ">
+                        <div class="col text-center">
+                            <input type="submit" value="Update item" class="btn btn-info" />
+                            <a href="{{url_for('staff_home')}}" class="btn btn-success" > Go back </a>
+                        </div>
+                    </div>    
+                </form>
+        </div>
+
+        <div class="col-md-1"></div>
+
+    </div>
+</div>
+
+
+{% endblock content %}

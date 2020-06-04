@@ -45,7 +45,7 @@ def about_us():
 def customer_register():
     if current_user.is_authenticated:
         flash("You will have to logout first ! ",'danger')
-        return redirect(url_for('home'))
+        return redirect(url_for('customer_home'))
 
     allcategories , allitems = getCategoriesAndItems()
     form = CustomerRegisterForm()
@@ -69,8 +69,8 @@ def customer_register():
 @login_required(role="customer")
 def customer_logout():
     
-    currentuser= User.get_or_404(current_user.id)
-    currentuser.is_active=False
+    currentuser= User.query.get_or_404(current_user.id)
+    currentuser.is_user_active=False
     User.save_to_db(currentuser)
     logout_user()
     return redirect(url_for('customer_home'))

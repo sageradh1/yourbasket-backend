@@ -81,6 +81,7 @@
                 <th>Discount</th>
                 <th>Tax</th>
                 <th>Grandtotal</th>
+                <th>Change Status</th>
             </thead>
             <tbody>
               {% for eachorder in listofTupleDTG %}
@@ -92,7 +93,9 @@
                   <td>{{  eachorder[2] }}</td>            
                   <td>{{  eachorder[3]}}</td>
                   <td>{{  eachorder[4]}}</td>
-                  <td>{{  eachorder[5]}}</td>      
+                  <td>{{  eachorder[5]}}</td>
+                  <td> <a href="{{url_for('updateorder_staff', id=eachorder[6])}}" class="btn btn-sm btn-info">Edit </a> </td>
+ 
                 </tr>
               </div>      
               {% endfor %}
