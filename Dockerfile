@@ -11,6 +11,7 @@ ADD . /app
 # RUN apk add --no-cache python3-dev
 # RUN apk add --no-cache libssl-dev
 # RUN apk add --no-cache libffi-dev
+RUN apk --update add python3-dev, postgresql-client, postgresql-dev, musl-dev
 RUN apk add build-base
 
 RUN pip install -r requirements.txt
