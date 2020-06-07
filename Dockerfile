@@ -6,10 +6,10 @@ ADD . /app
 # RUN apk add --no-cache wkhtmltopdf
 
 # RUN apk add --no-cache libpq-dev libssl-dev libffi-dev python3-dev
-RUN apk add --no-cache python3-dev \ 
-    libpq-dev \ 
-    libssl-dev \
-    libffi-dev
+RUN apk add --no-cache python3-dev
+RUN apk add --no-cache libpq-dev
+RUN apk add --no-cache libssl-dev
+RUN apk add --no-cache libffi-dev
 
 RUN pip install -r requirements.txt
 # RUN \
