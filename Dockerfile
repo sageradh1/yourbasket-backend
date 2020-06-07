@@ -1,4 +1,5 @@
-FROM python:3.6.1-alpine
+# FROM python:3.6.1-alpine
+FROM surnet/alpine-wkhtmltopdf:3.10-0.12.5-small
 WORKDIR /app
 ADD . /app
 
