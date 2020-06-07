@@ -4,17 +4,6 @@ FROM surnet/alpine-python-wkhtmltopdf:3.7.2-0.12.5-full
 WORKDIR /app
 ADD . /app
 
-# RUN apk add --no-cache wkhtmltopdf
-
-# RUN apk add --no-cache libpq-dev libssl-dev libffi-dev python3-dev
-# RUN apk add --no-cache libpq-dev
-# RUN apk add --no-cache python3-dev
-# RUN apk add --no-cache libssl-dev
-# RUN apk add --no-cache libffi-dev
-
-# RUN apk add build-base
-
-# RUN pip install -r requirements.txt
 RUN \
  apk add --no-cache postgresql-libs && \
  apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && \
