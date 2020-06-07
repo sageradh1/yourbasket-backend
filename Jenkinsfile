@@ -10,29 +10,29 @@ pipeline {
 	   		}
 /*____________________________________________________________________________________________________________*/
 		/* For first run there is no need to remove old images and container */
-		    // stage('Build first image') {
-		    //      steps {
-		    //      	sh 'sudo docker build -t yourbasket-backend:1.0.0 .'
-		    //      }
-		    // }
+		    stage('Build first image') {
+		         steps {
+		         	sh 'sudo docker build -t yourbasket-backend:1.0.0 .'
+		         }
+		    }
 /*_____________________________________________________________________________________________________________*/
 			/* For later runs*/
-		   stage('Stop and Remove old container') {
-		        steps {
+		//    stage('Stop and Remove old container') {
+		//         steps {
 
-                sh '''
-                    sudo docker container stop yourbasket-backend-container
-                    sudo docker container rm yourbasket-backend-container
-                '''
-		        }
-		   }
+        //         sh '''
+        //             sudo docker container stop yourbasket-backend-container
+        //             sudo docker container rm yourbasket-backend-container
+        //         '''
+		//         }
+		//    }
 
-		   stage('Remove old image and build new one') {
-		        steps {
-					sh 'sudo docker image rm yourbasket-backend:1.0.0'
-					sh 'sudo docker build -t yourbasket-backend:1.0.0 .'
-		        }
-		   }
+		//    stage('Remove old image and build new one') {
+		//         steps {
+		// 			sh 'sudo docker image rm yourbasket-backend:1.0.0'
+		// 			sh 'sudo docker build -t yourbasket-backend:1.0.0 .'
+		//         }
+		//    }
 /*_____________________________________________________________________________________________________________*/
 
 
