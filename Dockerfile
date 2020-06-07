@@ -3,7 +3,7 @@ FROM surnet/alpine-python-wkhtmltopdf:3.7.2-0.12.5-small
 WORKDIR /app
 ADD . /app
 
-RUN apk add --no-cache wkhtmltopdf
+# RUN apk add --no-cache wkhtmltopdf
 RUN pip install -r requirements.txt
 # RUN \
 #  apk add --no-cache postgresql-libs && \
