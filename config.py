@@ -6,7 +6,10 @@ class Config(object):
     DEBUG = False
     TESTING = False
 
-    GENERATED_CUSTOMER_INVOICE_FOLDER= basedir+"/app/static/static/pdf/customer_invoices"
+    GENERATED_CUSTOMER_INVOICE_FOLDER= basedir+"/app/static/static/pdf/customer-invoices"
+
+ 
+
     UPLOADED_PHOTOS_DEST = basedir+ '/app/static/images/item-images'
     DEFAULT_PHOTO_FOR_ITEMS = "no-image.png"
 

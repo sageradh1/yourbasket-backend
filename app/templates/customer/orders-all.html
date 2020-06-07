@@ -30,6 +30,7 @@
             <th>Discount</th>
             <th>Tax</th>
             <th>Grandtotal</th>
+            <th>Action</th>
         </thead>
         <tbody>
           {% for eachorder in listofTupleDTG %}
@@ -39,16 +40,12 @@
               <td>{{ eachorder[0] }}</td>
               <td>{{  eachorder[1] }}</td>
               <td>{{  eachorder[2] }}</td>
-              
-              
               <td>{{  eachorder[3]}}</td>
               <td>{{  eachorder[4]}}</td>
               <td>{{  eachorder[5]}}</td>
-              
-
-  
-              
-              
+              <td>
+               <a href="{{url_for('orders', invoice_number=eachorder[0])}}" class="btn btn-sm btn-info"> Details</a> 
+              </td>
             </tr>
           </div>
           

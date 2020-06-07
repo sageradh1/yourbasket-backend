@@ -83,17 +83,18 @@ def get_pdf(invoice_number):
                     tax = ("%.2f" % (.00 * float(subTotal)))
                     grandTotal = float("%.2f" % (1.00 * subTotal))
                 rendered =  render_template('order/pdf.html', invoice_number=invoice_number, tax=tax,grandTotal=grandTotal,customer=customer,orders=orders)
-                return rendered
-                pdffile = app.config['GENERATED_CUSTOMER_INVOICE_FOLDER'] + '/'+invoice_number+'.pdf'
-                # pdffile = app.config['GENERATED_CUSTOMER_INVOICE_FOLDER'] + '/'+'demo'+'.pdf'
-                pdf = pdfkit.from_string(rendered, pdffile)
+                
+                # pdffile = app.config['GENERATED_CUSTOMER_INVOICE_FOLDER'] + '/'+invoice_number+'.pdf'
+                # pdffile = 'app/static/static/pdf/customer-invoices/'+invoice_number+'.pdf'
+                pdf = pdfkit.from_string(rendered, False)
+                
                 response = make_response(pdf)
                 response.headers['content-Type'] ='application/pdf'
                 # to make client only view the pdf
-                response.headers['content-Disposition'] ='inline; filename='+invoice_number+'.pdf'
+                # response.headers['content-Disposition'] ='inline; filename='+invoice_number+'.pdf'
                 
                 # to make client download the pdf
-                # response.headers['content-Disposition'] ='attachment; filename='+invoice_number+'.pdf'
+                response.headers['content-Disposition'] ='attachment; filename='+invoice_number+'.pdf'
                 return response
             except Exception as err:
                 print(err)
