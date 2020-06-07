@@ -4,6 +4,8 @@ WORKDIR /app
 ADD . /app
 
 # RUN apk add --no-cache wkhtmltopdf
+
+RUN apk add --no-cache libpq-dev libssl-dev libffi-dev python3-dev
 RUN pip install -r requirements.txt
 # RUN \
 #  apk add --no-cache postgresql-libs && \
