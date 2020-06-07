@@ -1,5 +1,6 @@
 # FROM python:3.6.1-alpine
-FROM surnet/alpine-python-wkhtmltopdf:3.7.2-0.12.5-small
+# FROM surnet/alpine-python-wkhtmltopdf:3.7.2-0.12.5-small
+FROM surnet/alpine-python-wkhtmltopdf:3.7.2-0.12.5-full
 WORKDIR /app
 ADD . /app
 
@@ -7,9 +8,9 @@ ADD . /app
 
 # RUN apk add --no-cache libpq-dev libssl-dev libffi-dev python3-dev
 # RUN apk add --no-cache libpq-dev
-RUN apk add --no-cache python3-dev
+# RUN apk add --no-cache python3-dev
 # RUN apk add --no-cache libssl-dev
-RUN apk add --no-cache libffi-dev
+# RUN apk add --no-cache libffi-dev
 
 RUN pip install -r requirements.txt
 # RUN \
