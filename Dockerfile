@@ -2,7 +2,7 @@ FROM python:3.6.1-alpine
 WORKDIR /app
 ADD . /app
 
-RUN install wkhtmltopdf -y
+RUN apk add wkhtmltopdf -y
 RUN pip install -r requirements.txt
 # RUN \
 #  apk add --no-cache postgresql-libs && \
