@@ -54,3 +54,10 @@ class TestingConfig(Config):
 class ProductionConfig(Config):
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = os.getenv('PRODUCTION_SQLALCHEMY_DATABASE_URI')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    DB_NAME = os.getenv('PRODUCTION_DB_NAME')
+    DB_USERNAME = os.getenv('PRODUCTION_DB_USERNAME')
+    DB_PASSWORD = os.getenv('PRODUCTION_DB_PASSWORD')
+
+    SESSION_COOKIE_SECURE = False
