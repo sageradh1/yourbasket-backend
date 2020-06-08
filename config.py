@@ -52,4 +52,5 @@ class TestingConfig(Config):
     SESSION_COOKIE_SECURE = False
 
 class ProductionConfig(Config):
-    pass
+    DEBUG = False
+    SQLALCHEMY_DATABASE_URI = os.getenv('PRODUCTION_SQLALCHEMY_DATABASE_URI')
