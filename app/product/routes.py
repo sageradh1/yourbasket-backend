@@ -5,7 +5,8 @@ from app import app,login_required,photos,db
 from .productutils import getCategoriesAndItems,unnullifystring
 from .forms import Additems,Addcategories,Updateitems
 import os
-
+from wtforms import SelectField
+    
 # ++++++++++++++++++++++++++++++++++++ Item +++++++++++++++++++++++++++++++++++++++++++++ 
 @app.route('/item/<int:id>')
 def item_details_page(id):
@@ -35,7 +36,11 @@ def getallitems_admin():
 @app.route('/additem', methods=['GET','POST'])
 @login_required(role="admin")
 def additem():
+    IDS = [(each.id,each.name) for each in Category.query.all()]   
+    # return IDS_CATEGORIES
     form = Additems()
+    form.category_id_form.choices= IDS
+    # form.category_id = SelectField('Category', choices=IDS,coerce=int)
 
     if request.method=="POST":
         try:
@@ -45,7 +50,7 @@ def additem():
                 discount = form.discount.data
                 left_quantity = form.left_quantity.data
                 desc = form.desc.data
-                category_id = request.form.get('category_id')
+                category_id_form = request.form.get('category_id_form')
                 quantity_measuring_unit = request.form.get('quantity_measuring_unit')
                 
                 image_1 = photos.save(request.files.get('image_1'), name=request.files.get('image_1').filename)
@@ -63,31 +68,36 @@ def additem():
                 else:
                     image_3 = app.config["DEFAULT_PHOTO_FOR_ITEMS"]
 
-                newItem = Item(name=name,price=price,discount=discount,left_quantity=left_quantity,desc=desc,quantity_measuring_unit=quantity_measuring_unit,category_id=category_id,image_1=image_1,image_2=image_2,image_3=image_3)
+                newItem = Item(name=name,price=price,discount=discount,left_quantity=left_quantity,desc=desc,quantity_measuring_unit=quantity_measuring_unit,category_id=category_id_form,image_1=image_1,image_2=image_2,image_3=image_3)
                 db.session.add(newItem)
                 flash(f'The product {name} was added in database','success')
                 db.session.commit()
                 return redirect(url_for('admin_home'))
-
             else:
+                print("validation error")
                 print(form.errors)
                 return render_template('admin/item-add.html', form=form, title='Add a Product')
-
         except Exception as err:
             print(err)
             return render_template('admin/item-add.html', form=form, title='Add a Product')
-
-        
     return render_template('admin/item-add.html', form=form, title='Add a Product')
 
 
 @app.route('/updateitem/<int:id>', methods=['GET','POST'])
 @login_required(role="admin")
 def updateitem(id):
+
+    IDS = [(each.id,each.name) for each in Category.query.all()]
+    print(IDS)
     form = Updateitems()
+    form.category_id_form.choices= IDS
+    form.coerce=int
+    
     item = Item.query.get_or_404(id)
+    
     if request.method=="POST":
         try:
+            # form = Updateitems()
             if form.validate_on_submit():
                 
                 item.name = form.name.data
@@ -95,10 +105,10 @@ def updateitem(id):
                 item.discount = form.discount.data
                 item.left_quantity = form.left_quantity.data
                 item.desc = form.desc.data
-                item.category_id = request.form.get('category_id')
+                item.category_id = request.form.get('category_id_form')
+                print(request.form.get('category_id_form'))
                 item.quantity_measuring_unit = request.form.get('quantity_measuring_unit')
                 
-
                 if request.files.get('image_1'):
                     image_1 = photos.save(request.files.get('image_1'), name=request.files.get('image_1').filename)
                     item.image_1 = image_1
@@ -116,7 +126,6 @@ def updateitem(id):
                     item.image_3 = image_3
                     # request.files.get('image_3').save(os.path.join(app.config["UPLOADED_PHOTOS_DEST"], image_3))
 
-
                 db.session.add(item)
                 flash(f'The product was updated in database','success')
                 db.session.commit()
@@ -124,16 +133,20 @@ def updateitem(id):
 
             else:
                 print(form.errors)
-                flash('The name is already in use','warning')
+                flash('Problem while updating item','warning')
                 form = Updateitems(obj=item or None)
+                form.category_id_form.choices= IDS
                 return render_template('admin/item-add.html', form=form, title='Update Product',currentItem=item)
 
         except Exception as err:
             print(err)
             form = Updateitems(obj=item or None)
+            form.category_id_form.choices= IDS
             return render_template('admin/item-add.html', form=form, title='Update Product',currentItem=item)
-
-    form = Updateitems(obj=item or None)      
+    
+    form = Updateitems(obj=item or None)
+    form.category_id_form.choices= IDS
+    form.coerce=int
     return render_template('admin/item-add.html', form=form, title='Update Product',currentItem=item)
 
 

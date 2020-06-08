@@ -1,4 +1,4 @@
-from flask import Flask,session
+from flask import Flask,session,g
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import timedelta
@@ -10,6 +10,7 @@ from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_cl
 # from werkzeug.utils import secure_filename
 from flask_msearch import Search
 app = Flask(__name__)
+
 #To change default locations
 # app = Flask(__name__,
 #             static_url_path='', 
@@ -36,6 +37,10 @@ else:
 
 print("The environment is : "+app.config["ENV"])
 print(f"The current database being used is : ${app.config['DB_NAME']} ")
+
+#Global variables for categories and products
+# session['globalcategories'] = []
+# session['globalproducts']=[]
 
 #Loading db instance
 db = SQLAlchemy(app)

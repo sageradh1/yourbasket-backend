@@ -2,3 +2,7 @@
 .venv/
 .migration/
 initial-data._py
+app/static/images/item-images/*
+!app/static/images/item-images/no-image.png
+!app/static/images/non-changing-images/
+app/static/pdf/customer-invoices/*

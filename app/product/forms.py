@@ -4,10 +4,11 @@ from flask_wtf.file import FileField,FileRequired,FileAllowed
 from app.product.models import Category,Item
 from flask_wtf import FlaskForm
 
-allcategories = Category.query.all()
-IDS_CATEGORIES = [(each.id,each.name) for each in allcategories]
-# print(IDS_CATEGORIES)
 
+
+# allcategories = Category.query.all()
+# IDS_CATEGORIES = [(each.id,each.name) for each in allcategories]
+# print(IDS_CATEGORIES)
 
 #Custom validator using class
 # class ItemNameValidator(object):
@@ -21,6 +22,23 @@ IDS_CATEGORIES = [(each.id,each.name) for each in allcategories]
 #             raise ValidationError(self.message)
 
 class Additems(FlaskForm):
+    # IDS = []
+
+    # def __init__(self, IDS, *args, **kwargs):
+        
+    #     category_id = SelectField('Category', choices= IDS,coerce=int)
+    #     Additems.__init__(self, *args, **kwargs)
+
+    # def __init__(self,IDS):
+    #     super(Additems,self).__init__()
+    #     self.IDS = IDS
+    #     self.category_id = SelectField('Category', choices=self.IDS,coerce=int)
+
+    # def get_ids_categories():
+    #     IDS_CATEGORIES = [(each.id,each.name) for each in Category.query.all()]
+    #     print(IDS_CATEGORIES)
+    #     return IDS_CATEGORIES
+
     name = StringField('Name', [validators.DataRequired()])
     price = FloatField('Price', [validators.DataRequired()])
     discount = IntegerField('Discount', default=0)
@@ -29,7 +47,7 @@ class Additems(FlaskForm):
     quantity_measuring_unit = StringField('Unit measured in ', [validators.DataRequired()])
     desc = TextAreaField('Description', [validators.DataRequired()])
 
-    category_id = SelectField('Category Id', choices=IDS_CATEGORIES,coerce=int)
+    category_id_form = SelectField('Category', choices= [],coerce=int)
     
     image_1 = FileField(
         'Main Image',
@@ -43,6 +61,8 @@ class Additems(FlaskForm):
         if Item.query.filter_by(name=name.data).first():
             raise ValidationError("This item name is already in use!")
 
+
+
 class Updateitems(FlaskForm):
     id = IntegerField("ID",default=0)
     name = StringField('Name', [validators.DataRequired()])
@@ -53,7 +73,7 @@ class Updateitems(FlaskForm):
     quantity_measuring_unit = StringField('Unit measured in ', [validators.DataRequired()])
     desc = TextAreaField('Description', [validators.DataRequired()])
 
-    category_id = SelectField('Category Id', choices=IDS_CATEGORIES,coerce=int)
+    category_id_form = SelectField('Category', choices= [],coerce=int)
     
     image_1 = FileField(
         'Main Image',
@@ -63,13 +83,10 @@ class Updateitems(FlaskForm):
     image_3 = FileField('Second side image', validators=[ FileAllowed(['jpg','png','gif','jpeg'], 'Images only please')])
 
     def validate_name(self, name):
-
         if name.data == Item.query.get_or_404(self.id.data).name:
             pass
         else:
-
             # results = [c for c in Item.query.all() if c.name != name.data]
-
             # if name.data in [each.name for each in results]:
             #     raise ValidationError("This item name is already in use!")
             print("validation running")
@@ -83,3 +100,4 @@ class Addcategories(FlaskForm):
     def validate_name(self, name):
         if Category.query.filter_by(name=name.data).first():
             raise ValidationError("This category name is already in use!")
+

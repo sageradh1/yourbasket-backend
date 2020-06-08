@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 {% include 'admin/_admin_navbar.html' %}
-<!--==========END NAVBAR ==============-->
+{% from "_formhelpers.html" import render_field %}
 
 <div class="container">
     {% include '_messages.html' %}
@@ -14,48 +14,45 @@
                     {% else %}
                     Add
                     {% endif %} item</div>
-                {% from "_formhelpers.html" import render_field %}
-                <form action="" method="post" enctype="multipart/form-data">
+                
+                <form method="post" enctype="multipart/form-data">
                     {{ form.csrf_token }}
-                <div>
-
-                    {% if currentItem %} {{ render_field(form.id, class="form-control",type="hidden") }} {%endif%}
-                    {{ render_field(form.name, class="form-control") }}
-                    {{ render_field(form.price, class="form-control") }}
-                    {{ render_field(form.discount, class="form-control") }}
-                    {{ render_field(form.left_quantity, class="form-control") }}
-                    {{ render_field(form.quantity_measuring_unit, class="form-control") }}
-                    {{ render_field(form.category_id, class="form-control") }}
-                    {{ render_field(form.desc, class="form-control", rows="6") }}
-                </div>
-                <div class="container">
-                    <div class="row">
-                        {% if currentItem %}
-                        <div class="col-md-4"> <input type="file" name="image_1" id="image_1">
-                            <a href="{{url_for('static',filename='images/item-images/' + currentItem.image_1)}}"> {{ currentItem.image_1}}</a>
-                        </div>
-                        <div class="col-md-4"><input type="file" name="image_2" id="image_2"> 
-                            <a href="{{url_for('static',filename='images/item-images/' + currentItem.image_2)}}">{{ currentItem.image_2}}</a>
-                        </div>
+                    <div>
+                        {% if currentItem %} {{ render_field(form.id, class="form-control",type="hidden") }} {%endif%}
+                        {{ render_field(form.name, class="form-control") }}
+                        {{ render_field(form.price, class="form-control") }}
+                        {{ render_field(form.discount, class="form-control") }}
+                        {{ render_field(form.left_quantity, class="form-control") }}
+                        {{ render_field(form.quantity_measuring_unit, class="form-control") }}
+                        {{ render_field(form.category_id_form, class="form-control") }}
+                        {{ render_field(form.desc, class="form-control", rows="6") }}
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            {% if currentItem %}
+                                <div class="col-md-4"> <input type="file" name="image_1" id="image_1">
+                                    <a href="{{url_for('static',filename='images/item-images/' + currentItem.image_1)}}"> {{ currentItem.image_1}}</a>
+                                </div>
+                                <div class="col-md-4"><input type="file" name="image_2" id="image_2"> 
+                                    <a href="{{url_for('static',filename='images/item-images/' + currentItem.image_2)}}">{{ currentItem.image_2}}</a>
+                                </div>
+                                
+                                <div class="col-md-4"><input type="file" name="image_3" id="image_3"> 
+                                    <a href="{{url_for('static',filename='images/item-images/' + currentItem.image_3)}}"> {{ currentItem.image_3}}</a>
+                                </div>
                         
-                        <div class="col-md-4"><input type="file" name="image_3" id="image_3"> 
-                            <a href="{{url_for('static',filename='images/item-images/' + currentItem.image_3)}}"> {{ currentItem.image_3}}</a>
+                            {% else %}
+                                <div class="col-md-4">{{ render_field(form.image_1) }}</div>
+                                <div class="col-md-4">{{ render_field(form.image_2) }}</div>
+                                <div class="col-md-4">{{ render_field(form.image_3) }}</div>
+                            {% endif %}
                         </div>
-                      
-                        {% else %}
-                        <div class="col-md-4">{{ render_field(form.image_1) }}</div>
-                        <div class="col-md-4">{{ render_field(form.image_2) }}</div>
-                        <div class="col-md-4">{{ render_field(form.image_3) }}</div>
-                        {% endif %}
                     </div>
-                </div>
-                <div class="row ">
-                    <div class="col text-center">
-                        <input type="submit" value="{% if currentItem %}Update {% else %}Add{% endif %} item" class="btn btn-success" />
+                    <div class="row ">
+                        <div class="col text-center">
+                            <input type="submit" value="{% if currentItem %}Update {% else %}Add{% endif %} item" class="btn btn-success" />
+                        </div>
                     </div>
-                </div>
-                
-                
                 </form>
             </div>
       <div class="col-md-1"></div>
