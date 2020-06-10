@@ -1,5 +1,6 @@
 \_\_pycache\_\_
 .venv/
+venv
 .migrations/
 migrations/
 initial-data._py
