@@ -1,6 +1,7 @@
 \_\_pycache\_\_
 .venv/
-.migration/
+.migrations/
+migrations/
 initial-data._py
 app/static/images/item-images/*
 !app/static/images/item-images/no-image.png
