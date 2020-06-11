@@ -12,5 +12,5 @@ RUN \
  
 EXPOSE 4000
 
-CMD ["python3", "run.py"]
+# CMD ["python3", "run.py"]
 # ENTRYPOINT ["./gunicorn_starter.sh"]

@@ -1,0 +1,6 @@
+1. had to stop docker file because it was occuplying the port 80
+2. keep backup of the /etc/letsencrypt
+3. Dont forget to redirect http to https
+4. use docker container inspect containername to see IP gateway or IP V4.
+    I used gateway 172.17.0.1
+5. While certificate , there can an option for both the certifications using 1,2
