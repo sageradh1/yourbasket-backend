@@ -134,7 +134,7 @@
                     {% for eachItem in allitems %}
                         {% if eachItem.category_id == eachCategory.id %}
 
-                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
+                            <div class="col-lg-3 col-md-4 col-6">
                                 <div class="card">
                                     <img src="{{url_for('static', filename='images/item-images/' + eachItem.image_1)}}" class="card-img-top" alt="{{eachItem.name}}" height="200" width="200">
                                     <div class="card-body">
@@ -145,13 +145,20 @@
                                       <p class="text-center">Rs {{eachItem.price}} / {{eachItem.quantity_measuring_unit}}</p>
                                     </div>
                                     <div class="card-footer" style="bottom: 0px;">
-                                        <a href="{{url_for('item_details_page',id=eachItem.id)}}" class="float-left btn btn-sm btn-primary">Details</a>
-                                        <form action="{{url_for('addtocart')}}" method="post">
+
+                                        <div class="row">
+                                            <div class="col-md-6 col-12">
+                                                <a href="{{url_for('item_details_page',id=eachItem.id)}}" class="float-left btn btn-sm btn-primary">Details</a>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                         <form action="{{url_for('addtocart')}}" method="post">
                                           <input type="hidden" name="item_id" value="{{eachItem.id}}">
                                           <button type="submit" class="btn btn-sm btn-warning float-right">Add to Cart</button>
                                           <input type="hidden" name="quantity" value="1" min="0" max="{{eachItem.left_quantity}}">
-                                          
-                                      </form>
+                                      </form>                                               
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                               </div>
